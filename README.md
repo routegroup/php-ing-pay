@@ -15,6 +15,41 @@ package with a service provider, configuration binding and test factories.
 
 PHP 8.4 or newer. Nothing else: this package has no runtime dependencies.
 
+## Talking to the gateway
+
+This package sends nothing by itself. It describes a request and reads a
+response, and leaves the sending to a client you give it:
+
+```php
+interface Client
+{
+    public function send(Request $request): Response;
+}
+```
+
+One method, and no PSR-7 in sight. If you already have a PSR-18 client, wrap it:
+
+```php
+$client = new Psr18Client($yourPsr18Client, $yourPsr17Factory, $yourPsr17Factory);
+```
+
+That needs `psr/http-client` and `psr/http-factory`, which this package suggests
+rather than requires — it has no runtime dependencies of its own.
+
+In your tests, use `FakeClient` instead. It answers without a network and keeps
+what it was asked, so you can assert on both sides of the exchange:
+
+```php
+$client = FakeClient::answering(['status' => 'settled']);
+
+// ... drive your integration ...
+
+expect($client->lastRequest()->body)->toHaveKey('amount');
+```
+
+Running out of queued answers raises rather than inventing one, so a test cannot
+pass by accident on a call you did not expect.
+
 ## Factories in your own tests
 
 Every value has a factory, and `Payload::factory()` resolves it by convention:
