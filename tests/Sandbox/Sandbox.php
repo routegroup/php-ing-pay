@@ -34,7 +34,13 @@ final class Sandbox
         if ($file === null) {
             $file = [];
 
-            foreach (@file(self::root().'/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $line) {
+            $path = self::root().'/.env';
+
+            // Not @file(): the suppression still reaches PHPUnit as a warning,
+            // and CI never has this file.
+            $lines = is_file($path) ? file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) : [];
+
+            foreach ($lines ?: [] as $line) {
                 if (str_starts_with(trim($line), '#') || ! str_contains($line, '=')) {
                     continue;
                 }

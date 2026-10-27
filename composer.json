@@ -54,12 +54,13 @@
             "vendor/bin/pint --test"
         ],
         "test:types": "vendor/bin/phpstan analyse --memory-limit=1G",
-        "test:unit": "vendor/bin/pest --ci",
+        "test:unit": "vendor/bin/pest --ci --testsuite=core",
         "test": [
             "@test:lint",
             "@test:types",
             "@test:unit"
-        ]
+        ],
+        "test:sandbox": "vendor/bin/pest --testsuite=sandbox"
     },
     "config": {
         "sort-packages": true,
