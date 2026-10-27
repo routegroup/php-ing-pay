@@ -1,0 +1,130 @@
+# Verifies the package against the live ING Pay sandbox.
+#
+# Kept apart from run-tests.yml on purpose: different triggers, a longer run,
+# and the only workflow here that touches secrets.
+#
+# GitHub disables a schedule after roughly 60 days without commit activity in a
+# public repository. Once this package settles, this stops running on its own
+# and the absence of red will look like green.
+name: verify-sandbox
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.php'
+      - '**.js'
+      - '.github/workflows/verify-sandbox.yml'
+      - 'composer.json'
+      - 'package.json'
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+# The gateway notifies one configured address, so one tunnel, so one run.
+concurrency:
+  group: sandbox
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    # The lowest version the package claims. Higher ones are covered by the
+    # unit matrix; this run is about the gateway, not about PHP.
+    env:
+      ING_PAY_ENV: sandbox
+      ING_PAY_MERCHANT_ID: ${{ secrets.ING_PAY_MERCHANT_ID }}
+      ING_PAY_SERVICE_ID: ${{ secrets.ING_PAY_SERVICE_ID }}
+      ING_PAY_SERVICE_KEY: ${{ secrets.ING_PAY_SERVICE_KEY }}
+      ING_PAY_API_KEY: ${{ secrets.ING_PAY_API_KEY }}
+      ULTRAHOOK_API_KEY: ${{ secrets.ULTRAHOOK_API_KEY }}
+      ULTRAHOOK_SUBDOMAIN: ${{ vars.ULTRAHOOK_SUBDOMAIN || 'github' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Check that the sandbox is reachable at all
+        id: guard
+        run: |
+          missing=
+          for name in ING_PAY_MERCHANT_ID ING_PAY_SERVICE_ID ING_PAY_SERVICE_KEY ING_PAY_API_KEY ULTRAHOOK_API_KEY; do
+            [ -n "${!name}" ] || missing="$missing $name"
+          done
+          if [ -n "$missing" ]; then
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Skipping: no sandbox credentials for$missing. Set them as repository secrets."
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup PHP
+        if: steps.guard.outputs.ok == 'true'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: dom, filter, fileinfo, json, libxml, mbstring, xmlwriter, zip, intl
+          coverage: none
+
+      - name: Setup Node
+        if: steps.guard.outputs.ok == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup Ruby
+        if: steps.guard.outputs.ok == 'true'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+
+      - name: Install dependencies
+        if: steps.guard.outputs.ok == 'true'
+        run: |
+          composer update --prefer-stable --prefer-dist --no-interaction
+          npm ci --no-audit --no-fund
+          npx playwright install --with-deps chromium
+          gem install ultrahook --no-document
+
+      - name: Start the catcher and open the tunnel
+        if: steps.guard.outputs.ok == 'true'
+        run: |
+          php -S 127.0.0.1:8000 bin/sandbox-server.php > catcher.log 2>&1 &
+          printf 'api_key: %s\n' "$ULTRAHOOK_API_KEY" > "$HOME/.ultrahook"
+          ultrahook "$ULTRAHOOK_SUBDOMAIN" http://127.0.0.1:8000 > tunnel.log 2>&1 &
+          for _ in $(seq 1 20); do
+            curl -sf http://127.0.0.1:8000/ > /dev/null && break
+            sleep 1
+          done
+          curl -sf http://127.0.0.1:8000/ > /dev/null
+
+      - name: Build the widget page
+        if: steps.guard.outputs.ok == 'true'
+        run: php bin/sandbox-widget-page.php
+
+      - name: Register a card profile through the widget
+        if: steps.guard.outputs.ok == 'true'
+        run: npx playwright test
+
+      - name: Verify against the sandbox
+        if: steps.guard.outputs.ok == 'true'
+        run: composer test:sandbox
+
+      - name: Keep what the run saw
+        if: always() && steps.guard.outputs.ok == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: sandbox-run
+          path: |
+            catcher.log
+            tunnel.log
+            .sandbox/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7

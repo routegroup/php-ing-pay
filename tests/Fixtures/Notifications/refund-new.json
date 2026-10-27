@@ -1,0 +1,6 @@
+{
+    "headers": {
+        "x-imoje-signature": "merchantid=fixturemerchant00001;serviceid=00000000-0000-4000-8000-000000000001;signature=b2624b25fb45d9ed6132f34c9506dc64c0659fdb7229830053e4f2ddf96c35fc;alg=sha256"
+    },
+    "body": "{\"transaction\":{\"id\":\"2baa6a3f-1561-4ed1-80ad-c7ec33d189f5\",\"type\":\"refund\",\"status\":\"new\",\"source\":\"api\",\"created\":1793092901,\"modified\":1793092901,\"notificationUrl\":\"https://example.test/notify\",\"serviceId\":\"00000000-0000-4000-8000-000000000001\",\"amount\":200,\"currency\":\"PLN\",\"title\":\"Zwrot czesciowy\",\"orderId\":\"PROFILE-84763023\",\"paymentMethod\":\"card\",\"paymentMethodCode\":\"oneclick\"},\"originalTransactionId\":\"db57be6c-3ca8-4de3-b3f3-6e12bdfbbb1a\",\"payment\":{\"id\":\"db57be6c-3ca8-4de3-b3f3-6e12bdfbbb1a\",\"title\":\"Obciazenie profilu\",\"amount\":500,\"status\":\"settled\",\"created\":1793092880,\"orderId\":\"PROFILE-84763023\",\"currency\":\"PLN\",\"modified\":1793092880,\"serviceId\":\"00000000-0000-4000-8000-000000000001\",\"ipksef\":\"\",\"notificationUrl\":\"https://example.test/notify\"}}"
+}

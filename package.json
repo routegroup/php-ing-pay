@@ -1,0 +1,11 @@
+{
+    "name": "php-ing-pay-browser",
+    "private": true,
+    "description": "The one step of the sandbox run that needs a browser: registering a card profile through the gateway's widget.",
+    "devDependencies": {
+        "@playwright/test": "^1.49.0"
+    },
+    "scripts": {
+        "test:widget": "playwright test"
+    }
+}

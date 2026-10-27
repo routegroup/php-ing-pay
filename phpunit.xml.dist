@@ -16,8 +16,12 @@
     backupStaticProperties="false"
 >
     <testsuites>
-        <testsuite name="ING Pay Core Test Suite">
+        <testsuite name="core">
             <directory>tests</directory>
+            <exclude>tests/Sandbox</exclude>
+        </testsuite>
+        <testsuite name="sandbox">
+            <directory>tests/Sandbox</directory>
         </testsuite>
     </testsuites>
     <logging>

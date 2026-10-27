@@ -1,0 +1,6 @@
+{
+    "headers": {
+        "x-imoje-signature": "merchantid=fixturemerchant00001;serviceid=00000000-0000-4000-8000-000000000001;signature=fe31de7ea0da4d72447d7fd228c5377c26127fbba15ad7257ab7d28549defd67;alg=sha256"
+    },
+    "body": "{\"transaction\":{\"id\":\"8d57c2e0-ce6b-4aaa-849b-619beb343d8a\",\"type\":\"sale\",\"status\":\"settled\",\"source\":\"web\",\"created\":1793091780,\"modified\":1793091786,\"notificationUrl\":\"https://example.test/notify\",\"serviceId\":\"00000000-0000-4000-8000-000000000001\",\"amount\":1000,\"currency\":\"PLN\",\"title\":\"WIDGET-5eed3399\",\"orderId\":\"WIDGET-5eed3399\",\"paymentMethod\":\"card\",\"paymentMethodCode\":\"ecom3ds\",\"statusCode\":\"CODE_000\",\"statusCodeDescription\":\"CODE_000 - OK\"},\"payment\":{\"id\":\"8d57c2e0-ce6b-4aaa-849b-619beb343d8a\",\"title\":null,\"amount\":1000,\"status\":\"settled\",\"created\":1793091700,\"orderId\":\"WIDGET-5eed3399\",\"currency\":\"PLN\",\"modified\":1793091786,\"serviceId\":\"00000000-0000-4000-8000-000000000001\",\"ipksef\":\"\",\"notificationUrl\":\"https://example.test/notify\"}}"
+}

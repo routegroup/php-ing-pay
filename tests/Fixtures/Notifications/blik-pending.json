@@ -1,0 +1,6 @@
+{
+    "headers": {
+        "x-imoje-signature": "merchantid=fixturemerchant00001;serviceid=00000000-0000-4000-8000-000000000001;signature=ea8f43cd8dd9b5081965c06d0d57fab571ab15cb246530ba2f0c4d5f59a7d95d;alg=sha256"
+    },
+    "body": "{\"transaction\":{\"id\":\"79333e36-883a-4566-a84e-97c933b37e19\",\"type\":\"sale\",\"status\":\"pending\",\"source\":\"api\",\"created\":1793090952,\"modified\":1793090952,\"notificationUrl\":\"https://example.test/notify\",\"serviceId\":\"00000000-0000-4000-8000-000000000001\",\"amount\":1000,\"currency\":\"PLN\",\"title\":\"\",\"orderId\":\"HOOK-fead3f98\",\"paymentMethod\":\"blik\",\"paymentMethodCode\":\"blik\"},\"payment\":{\"id\":\"79333e36-883a-4566-a84e-97c933b37e19\",\"title\":\"\",\"amount\":1000,\"status\":\"pending\",\"created\":1793090952,\"orderId\":\"HOOK-fead3f98\",\"currency\":\"PLN\",\"modified\":1793090952,\"serviceId\":\"00000000-0000-4000-8000-000000000001\",\"ipksef\":\"\",\"notificationUrl\":\"https://example.test/notify\"},\"action\":{\"type\":\"redirect\",\"url\":\"https://paywall.sandbox.pay.ing.pl/redirect/79333e36-883a-4566-a84e-97c933b37e19/e302af89-9bff-4bda-abe4-3229078704b8\",\"method\":\"GET\",\"contentType\":\"\",\"contentBodyRaw\":\"\"}}"
+}
