@@ -8,18 +8,18 @@ use Routegroup\IngPay\Factories\Factory;
 use Routegroup\IngPay\Value\Transaction;
 
 afterEach(function (): void {
-    Factory::resolveAmbientUsing(null);
+    Factory::useSharedState(null);
 });
 
-it('leaves the definition alone when nothing resolves ambient values', function (): void {
+it('leaves the definition alone when nothing resolves shared state', function (): void {
     $first = Transaction::factory()->make()->serviceId;
     $second = Transaction::factory()->make()->serviceId;
 
     expect($first)->not->toBe($second);
 });
 
-it('bakes ambient values into everything a factory builds', function (): void {
-    Factory::resolveAmbientUsing(fn (): array => ['serviceId' => 'service-from-config']);
+it('bakes shared state into everything a factory builds', function (): void {
+    Factory::useSharedState(fn (): array => ['serviceId' => 'service-from-config']);
 
     expect(Transaction::factory()->make()->serviceId)->toBe('service-from-config')
         ->and(Transaction::factory()->makeMany(3))->each(
@@ -27,22 +27,22 @@ it('bakes ambient values into everything a factory builds', function (): void {
         );
 });
 
-it('lets a state win over an ambient value', function (): void {
-    Factory::resolveAmbientUsing(fn (): array => ['serviceId' => 'service-from-config']);
+it('lets a factory state win over the shared one', function (): void {
+    Factory::useSharedState(fn (): array => ['serviceId' => 'service-from-config']);
 
     expect(Transaction::factory()->state(['serviceId' => 'overridden'])->make()->serviceId)
         ->toBe('overridden');
 });
 
 it('lets the call site win over both', function (): void {
-    Factory::resolveAmbientUsing(fn (): array => ['serviceId' => 'service-from-config']);
+    Factory::useSharedState(fn (): array => ['serviceId' => 'service-from-config']);
 
     expect(Transaction::factory()->state(['serviceId' => 'overridden'])->make(['serviceId' => 'explicit'])->serviceId)
         ->toBe('explicit');
 });
 
-it('ignores ambient keys a payload does not declare', function (): void {
-    Factory::resolveAmbientUsing(fn (): array => [
+it('ignores shared state keys a payload does not declare', function (): void {
+    Factory::useSharedState(fn (): array => [
         'serviceId' => 'service-from-config',
         'merchantId' => 'merchant-from-config',
     ]);
@@ -54,7 +54,7 @@ it('ignores ambient keys a payload does not declare', function (): void {
 
 it('is resolved afresh for every payload, not captured once', function (): void {
     $calls = 0;
-    Factory::resolveAmbientUsing(function () use (&$calls): array {
+    Factory::useSharedState(function () use (&$calls): array {
         $calls++;
 
         return ['serviceId' => 'call-'.$calls];
@@ -67,8 +67,8 @@ it('is resolved afresh for every payload, not captured once', function (): void 
 });
 
 it('stops applying them once cleared', function (): void {
-    Factory::resolveAmbientUsing(fn (): array => ['serviceId' => 'service-from-config']);
-    Factory::resolveAmbientUsing(null);
+    Factory::useSharedState(fn (): array => ['serviceId' => 'service-from-config']);
+    Factory::useSharedState(null);
 
     expect(Transaction::factory()->make()->serviceId)->not->toBe('service-from-config');
 });

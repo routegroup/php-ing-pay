@@ -34,7 +34,7 @@ configuration, hand the base a resolver once, during test bootstrapping:
 ```php
 use Routegroup\IngPay\Factories\Factory;
 
-Factory::resolveAmbientUsing(fn (): array => [
+Factory::useSharedState(fn (): array => [
     'merchantId' => $yourMerchantId,
     'serviceId' => $yourServiceId,
 ]);

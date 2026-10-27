@@ -40,14 +40,17 @@ abstract class Factory
      *
      * @var (Closure(): array<string, mixed>)|null
      */
-    private static ?Closure $ambient = null;
+    private static ?Closure $sharedState = null;
 
     /**
+     * State shared by every factory, applied before a factory's own state() so
+     * either can still override it.
+     *
      * @param  (Closure(): array<string, mixed>)|null  $resolver  null clears it
      */
-    public static function resolveAmbientUsing(?Closure $resolver): void
+    public static function useSharedState(?Closure $resolver): void
     {
-        self::$ambient = $resolver;
+        self::$sharedState = $resolver;
     }
 
     public static function new(): static
@@ -125,8 +128,8 @@ abstract class Factory
     {
         $values = $this->definition();
 
-        if (self::$ambient instanceof Closure) {
-            $values = array_replace($values, (self::$ambient)());
+        if (self::$sharedState instanceof Closure) {
+            $values = array_replace($values, (self::$sharedState)());
         }
 
         foreach ($this->states as $state) {
