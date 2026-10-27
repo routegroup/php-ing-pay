@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Routegroup\IngPay\Value;
 
+use Routegroup\IngPay\Attributes\ListOf;
 use Routegroup\IngPay\Concerns\HasFactory;
 use Routegroup\IngPay\Exceptions\InvalidCartException;
 use Routegroup\IngPay\Factories\Value\CartFactory;
@@ -17,6 +18,7 @@ class Cart extends Payload
     use HasFactory;
 
     /** @var list<CartItem> */
+    #[ListOf(CartItem::class)]
     public readonly array $items;
 
     /** @throws InvalidCartException */
@@ -30,14 +32,6 @@ class Cart extends Payload
         }
 
         parent::__construct(['items' => CartItem::fromList($items)]);
-    }
-
-    public function toArray(): array
-    {
-        return ['items' => array_map(
-            static fn (CartItem $item): array => $item->toArray(),
-            $this->items,
-        )];
     }
 
     /** The paywall carries the cart as one signed field, gzipped at level 5. */

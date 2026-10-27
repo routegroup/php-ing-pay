@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Routegroup\IngPay\Response;
 
+use Routegroup\IngPay\Attributes\ListOf;
 use Routegroup\IngPay\Concerns\HasFactory;
 use Routegroup\IngPay\Factories\Response\PaymentMethodsResponseFactory;
 use Routegroup\IngPay\Value\PaymentMethodGroup;
@@ -16,6 +17,7 @@ class PaymentMethodsResponse extends BaseResponse
     use HasFactory;
 
     /** @var list<PaymentMethodGroup>|null */
+    #[ListOf(PaymentMethodGroup::class)]
     public readonly ?array $methods;
 
     public readonly ?int $timestamp;
@@ -39,10 +41,7 @@ class PaymentMethodsResponse extends BaseResponse
         };
 
         return [
-            'methods' => array_map(
-                static fn (mixed $method): mixed => is_array($method) ? new PaymentMethodGroup($method) : $method,
-                $methods,
-            ),
+            'methods' => $methods,
             'timestamp' => $body['timestamp'] ?? null,
         ];
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Routegroup\IngPay\Value;
 
+use Routegroup\IngPay\Attributes\ListOf;
 use Routegroup\IngPay\Concerns\HasFactory;
 use Routegroup\IngPay\Exceptions\InvalidInvoiceException;
 use Routegroup\IngPay\Factories\Value\InvoiceFactory;
@@ -25,6 +26,7 @@ class Invoice extends Payload
     public readonly InvoiceBuyer $buyer;
 
     /** @var list<InvoicePosition> */
+    #[ListOf(InvoicePosition::class)]
     public readonly array $positions;
 
     /** @throws InvalidInvoiceException */
@@ -48,18 +50,6 @@ class Invoice extends Payload
         );
 
         parent::__construct($attributes);
-    }
-
-    public function toArray(): array
-    {
-        $attributes = parent::toArray();
-
-        $attributes['positions'] = array_map(
-            static fn (mixed $p): mixed => $p instanceof InvoicePosition ? $p->toArray() : $p,
-            is_array($attributes['positions'] ?? null) ? $attributes['positions'] : [],
-        );
-
-        return $attributes;
     }
 
     /** The paywall carries the invoice as one signed field, gzipped at level 5. */
