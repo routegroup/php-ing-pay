@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Routegroup\IngPay\Factories;
 
+use Closure;
 use Faker\Factory as FakerFactory;
 use Faker\Generator;
 use Routegroup\IngPay\Exceptions\MissingFakerException;
@@ -23,7 +24,7 @@ abstract class Factory
 
     protected int $count = 1;
 
-    /** @var list<array<string, mixed>> */
+    /** @var list<array<string, mixed>|Closure(array<string, mixed>): array<string, mixed>> */
     protected array $states = [];
 
     /** @var list<array<string, mixed>> */
@@ -43,9 +44,12 @@ abstract class Factory
     abstract protected function definition(): array;
 
     /**
-     * @param  array<string, mixed>  $attributes
+     * A closure receives the values built so far, so a state can depend on what
+     * the definition generated rather than only replacing it.
+     *
+     * @param  array<string, mixed>|Closure(array<string, mixed>): array<string, mixed>  $attributes
      */
-    public function state(array $attributes): static
+    public function state(array|Closure $attributes): static
     {
         $clone = clone $this;
         $clone->states[] = $attributes;
@@ -104,7 +108,7 @@ abstract class Factory
         $values = $this->definition();
 
         foreach ($this->states as $state) {
-            $values = array_replace($values, $state);
+            $values = array_replace($values, $state instanceof Closure ? $state($values) : $state);
         }
 
         if ($this->sequence !== []) {
