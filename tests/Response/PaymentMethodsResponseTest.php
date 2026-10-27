@@ -7,7 +7,6 @@ namespace Routegroup\IngPay\Tests\Response;
 use Routegroup\IngPay\Http\Response as HttpResponse;
 use Routegroup\IngPay\Response\PaymentMethodsResponse;
 use Routegroup\IngPay\Types\PaymentMethod;
-use Routegroup\IngPay\Value\PaymentMethodGroup;
 
 /**
  * The shape below is what the sandbox answers with, taken from a probe against
@@ -37,7 +36,7 @@ it('unwraps the envelope the gateway actually sends', function (): void {
     $response = new PaymentMethodsResponse(new HttpResponse(200, envelope()));
 
     expect($response->methods)->toHaveCount(1)
-        ->and($response->methods[0])->toBeInstanceOf(PaymentMethodGroup::class)
+        ->and($response->methods[0]->label)->toBe('Płatność BLIK')
         ->and($response->timestamp)->toBe(1793088213695);
 });
 
