@@ -2,3 +2,18 @@ parameters:
     level: 6
     paths:
         - src
+
+    ignoreErrors:
+        # Payload assigns every declared public property by reflection in its
+        # constructor, which PHPStan cannot follow. The rule exists to catch a
+        # hand-written constructor that forgets a property; a payload has no
+        # constructor of its own to forget one, so the bug it guards against
+        # cannot occur here.
+        #
+        # Checking at use sites is unaffected and is the reason these properties
+        # are typed at all: PHPStan still reads the declared types and still
+        # rejects strlen($transaction->amount) or treating $fee->merchant as a
+        # string. Verified against a deliberate misuse before this was added.
+        -
+            identifier: property.uninitializedReadonly
+            path: src/Value/*
