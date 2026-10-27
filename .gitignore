@@ -9,3 +9,6 @@ testbench.yaml
 vendor
 node_modules
 .env
+
+# Written by the sandbox run: the widget page and the notifications it catches.
+.sandbox/
