@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Routegroup\IngPay\Http;
 
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Psr7\HttpFactory as GuzzleFactory;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Routegroup\IngPay\Exceptions\MissingGuzzleException;
 
 /**
  * Lets anyone who already has a PSR-18 client use it, without PSR-7 reaching
@@ -20,6 +23,23 @@ class Psr18Client implements Client
         private readonly RequestFactoryInterface $requests,
         private readonly StreamFactoryInterface $streams,
     ) {}
+
+    /**
+     * Guzzle is a PSR-18 client and ships PSR-17 factories, so it needs no
+     * adapter of its own — only the wiring, which is this.
+     *
+     * @param  array<string, mixed>  $options  passed to Guzzle, for timeouts and the like
+     */
+    public static function guzzle(array $options = []): self
+    {
+        if (! class_exists(GuzzleClient::class) || ! class_exists(GuzzleFactory::class)) {
+            throw new MissingGuzzleException;
+        }
+
+        $factory = new GuzzleFactory;
+
+        return new self(new GuzzleClient($options), $factory, $factory);
+    }
 
     public function send(Request $request): Response
     {
@@ -46,6 +66,11 @@ class Psr18Client implements Client
             $headers[$name] = $answer->getHeaderLine($name);
         }
 
-        return new Response($answer->getStatusCode(), (string) $answer->getBody(), $headers);
+        return new Response(
+            $answer->getStatusCode(),
+            (string) $answer->getBody(),
+            $headers,
+            $answer->getReasonPhrase() ?: null,
+        );
     }
 }

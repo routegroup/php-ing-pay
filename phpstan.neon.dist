@@ -24,4 +24,6 @@ parameters:
                 - src/Value/*
                 - src/Response/*
                 - src/Notification/*
+                - src/Api/*
+                - src/Paywall/*
                 - tests/Fixtures/*

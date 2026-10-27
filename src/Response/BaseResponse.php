@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Routegroup\IngPay\Response;
 
+use Routegroup\IngPay\Concerns\HasFactory;
 use Routegroup\IngPay\Http\Response as HttpResponse;
 use Routegroup\IngPay\Payload;
 
@@ -13,6 +14,12 @@ use Routegroup\IngPay\Payload;
  */
 abstract class BaseResponse extends Payload
 {
+    /** Resolution runs on the concrete class, so the base never looks for one of its own. */
+    use HasFactory;
+
+    // A constructor is exempt from signature compatibility in PHP, and this one
+    // takes an answer rather than the array a payload normally hydrates from.
+    // @phpstan-ignore method.childParameterType, parameter.notOptional
     public function __construct(protected readonly HttpResponse $http)
     {
         parent::__construct($this->normalise($this->http->json()));

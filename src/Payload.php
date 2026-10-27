@@ -12,6 +12,8 @@ use ReflectionProperty;
 use Routegroup\IngPay\Exceptions\MissingFieldException;
 
 /**
+ * @phpstan-consistent-constructor
+ *
  * The declared type of a property is the only description of a field: it says
  * what the field is, whether it may be absent, and how an incoming value is
  * converted. Nothing is declared twice.
@@ -82,10 +84,20 @@ abstract class Payload implements JsonSerializable
     private function convert(string $type, mixed $value): mixed
     {
         if (is_a($type, self::class, true)) {
-            /** @var array<string, mixed> $attributes */
-            $attributes = is_array($value) ? $value : [];
+            if ($value instanceof $type) {
+                return $value;
+            }
 
-            return $value instanceof $type ? $value : new $type($attributes);
+            // A payload of a neighbouring type converts through its array form,
+            // which is how a Billing becomes the Shipping a field asks for.
+            /** @var array<string, mixed> $attributes */
+            $attributes = match (true) {
+                $value instanceof self => $value->toArray(),
+                is_array($value) => $value,
+                default => [],
+            };
+
+            return new $type($attributes);
         }
 
         if (is_subclass_of($type, BackedEnum::class)) {

@@ -17,6 +17,7 @@ class Response
         public readonly int $status,
         public readonly string $body,
         public readonly array $headers = [],
+        public readonly ?string $reason = null,
     ) {}
 
     public function successful(): bool

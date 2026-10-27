@@ -31,6 +31,11 @@ class Request
         return new self('GET', $url);
     }
 
+    public static function delete(string $url): self
+    {
+        return new self('DELETE', $url);
+    }
+
     /** @param array<string, mixed> $body */
     public static function put(string $url, array $body = []): self
     {

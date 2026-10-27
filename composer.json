@@ -21,6 +21,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.24",
+        "guzzlehttp/guzzle": "^7.9||^8.0",
         "laravel/pint": "^1.30.5",
         "nyholm/psr7": "^1.8",
         "pestphp/pest": "^5.3",
@@ -70,6 +71,7 @@
     "suggest": {
         "fakerphp/faker": "Required by the test factories (Payload::factory()); this package does not need it at runtime.",
         "psr/http-client": "Required only by Psr18Client, to drive this package with an HTTP client you already have.",
-        "psr/http-factory": "Required only by Psr18Client, alongside psr/http-client."
+        "psr/http-factory": "Required only by Psr18Client, alongside psr/http-client.",
+        "guzzlehttp/guzzle": "A PSR-18 client that Psr18Client::guzzle() wires up in one line; any other PSR-18 client works too."
     }
 }
