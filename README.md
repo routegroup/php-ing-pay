@@ -13,7 +13,7 @@ package with a service provider, configuration binding and test factories.
 
 ## Requirements
 
-PHP 8.3 or newer. Nothing else: this package has no runtime dependencies.
+PHP 8.4 or newer. Nothing else: this package has no runtime dependencies.
 
 ## Licence
 
