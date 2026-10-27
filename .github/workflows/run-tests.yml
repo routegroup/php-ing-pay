@@ -8,6 +8,7 @@ on:
       - '**.php'
       - '.github/workflows/run-tests.yml'
       - 'phpstan.neon.dist'
+      - 'rector.php'
       - 'phpunit.xml.dist'
       - 'composer.json'
   pull_request:
@@ -15,6 +16,7 @@ on:
       - '**.php'
       - '.github/workflows/run-tests.yml'
       - 'phpstan.neon.dist'
+      - 'rector.php'
       - 'phpunit.xml.dist'
       - 'composer.json'
   workflow_dispatch:
@@ -55,7 +57,7 @@ jobs:
         run: composer show -D
 
       - name: Execute tests
-        run: vendor/bin/pest --ci
+        run: composer test:unit
 
   analyse:
     runs-on: ubuntu-latest
@@ -77,5 +79,28 @@ jobs:
       - name: Install dependencies
         run: composer update --prefer-stable --prefer-dist --no-interaction
 
-      - name: Analyse
-        run: composer analyse
+      - name: Analyse types
+        run: composer test:types
+
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    name: Lint
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: dom, libxml, mbstring, zip, intl
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-stable --prefer-dist --no-interaction
+
+      - name: Check Rector and Pint
+        run: composer test:lint

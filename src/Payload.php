@@ -23,7 +23,7 @@ abstract class Payload
     /** @param array<string, mixed> $attributes */
     public function __construct(array $attributes = [])
     {
-        foreach (self::fields() as $field) {
+        foreach ($this->fields() as $field) {
             $name = $field->getName();
 
             $this->$name = $this->read($field, $attributes[$name] ?? null);
@@ -35,7 +35,7 @@ abstract class Payload
     {
         $values = [];
 
-        foreach (self::fields() as $field) {
+        foreach ($this->fields() as $field) {
             $value = $this->{$field->getName()};
 
             if ($value !== null) {
@@ -47,10 +47,10 @@ abstract class Payload
     }
 
     /** @return list<ReflectionProperty> */
-    private static function fields(): array
+    private function fields(): array
     {
         return array_values(array_filter(
-            (new ReflectionClass(static::class))->getProperties(ReflectionProperty::IS_PUBLIC),
+            new ReflectionClass(static::class)->getProperties(ReflectionProperty::IS_PUBLIC),
             static fn (ReflectionProperty $field): bool => ! $field->isStatic(),
         ));
     }

@@ -19,7 +19,7 @@ enum Environment: string
 
     public function paywallUrl(?Lang $lang = null): string
     {
-        if ($lang) {
+        if ($lang instanceof Lang) {
             $locale = $lang->value;
 
             return match ($this) {

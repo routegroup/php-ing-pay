@@ -9,13 +9,9 @@ use InvalidArgumentException;
 /** Covers the whole wallet flow, browser data included, so the field carries its own full path. */
 class InvalidWalletException extends InvalidArgumentException
 {
-    public readonly string $field;
-
-    public function __construct(string $field, string $reason)
+    public function __construct(public readonly string $field, string $reason)
     {
-        $this->field = $field;
-
-        parent::__construct("$field: $reason");
+        parent::__construct("{$this->field}: $reason");
     }
 
     /** @return array{field: string} */

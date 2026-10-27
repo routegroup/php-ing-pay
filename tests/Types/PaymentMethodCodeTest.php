@@ -25,9 +25,5 @@ it('never serves a logo from the retired imoje host', function (): void {
         PaymentMethodCode::cases(),
     ));
 
-    expect($logos)->not->toBeEmpty();
-
-    foreach ($logos as $logo) {
-        expect($logo)->toStartWith('https://cdn.pay.ing.pl/img/pay/');
-    }
+    expect($logos)->not->toBeEmpty()->each->toStartWith('https://cdn.pay.ing.pl/img/pay/');
 });

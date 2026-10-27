@@ -8,13 +8,9 @@ use Exception;
 
 class SchemaValidationException extends Exception
 {
-    /** @var array<string, string> */
-    public readonly array $errors;
-
     /** @param array<string, string> $errors */
-    public function __construct(array $errors)
+    public function __construct(public readonly array $errors)
     {
-        $this->errors = $errors;
         parent::__construct('Given data doesnt fulfill JSON schema requirements.', 422);
     }
 

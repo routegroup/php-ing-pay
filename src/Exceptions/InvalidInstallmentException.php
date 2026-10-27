@@ -8,12 +8,8 @@ use InvalidArgumentException;
 
 class InvalidInstallmentException extends InvalidArgumentException
 {
-    public readonly mixed $period;
-
-    public function __construct(mixed $period, string $reason)
+    public function __construct(public readonly mixed $period, string $reason)
     {
-        $this->period = $period;
-
         parent::__construct("installment.period: $reason");
     }
 

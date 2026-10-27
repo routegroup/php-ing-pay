@@ -8,13 +8,9 @@ use InvalidArgumentException;
 
 class InvalidInvoiceException extends InvalidArgumentException
 {
-    public readonly string $field;
-
-    public function __construct(string $field, string $reason)
+    public function __construct(public readonly string $field, string $reason)
     {
-        $this->field = $field;
-
-        parent::__construct("invoice.$field: $reason");
+        parent::__construct("invoice.{$this->field}: $reason");
     }
 
     /** @return array{field: string} */

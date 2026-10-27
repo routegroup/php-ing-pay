@@ -1,7 +1,11 @@
+includes:
+    - vendor/pestphp/pest-plugin-phpstan/extension.neon
+
 parameters:
     level: 6
     paths:
         - src
+        - tests
 
     ignoreErrors:
         # Payload assigns every declared public property by reflection in its
@@ -16,4 +20,6 @@ parameters:
         # string. Verified against a deliberate misuse before this was added.
         -
             identifier: property.uninitializedReadonly
-            path: src/Value/*
+            paths:
+                - src/Value/*
+                - tests/Fixtures/*

@@ -15,6 +15,19 @@ package with a service provider, configuration binding and test factories.
 
 PHP 8.4 or newer. Nothing else: this package has no runtime dependencies.
 
+## Development
+
+```
+composer test        # lint, types and tests — the same gate CI runs
+composer test:lint   # Rector and Pint, checking only
+composer test:types  # PHPStan
+composer test:unit   # Pest
+composer lint        # Rector and Pint, fixing in place
+```
+
+Everything runs in the project's container, for example
+`docker compose run --rm app composer test`.
+
 ## Licence
 
 MIT. See [LICENSE.md](LICENSE.md).

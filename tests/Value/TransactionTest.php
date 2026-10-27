@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Routegroup\IngPay\Tests\Value;
 
+use Error;
 use Routegroup\IngPay\Exceptions\MissingFieldException;
 use Routegroup\IngPay\Types\Currency;
 use Routegroup\IngPay\Types\PaymentMethod;
@@ -17,6 +18,10 @@ use Routegroup\IngPay\Value\PayerCardData;
 use Routegroup\IngPay\Value\PaymentSummary;
 use Routegroup\IngPay\Value\Transaction;
 
+/**
+ * @param  array<string, mixed>  $overrides
+ * @return array<string, mixed>
+ */
 function wire(array $overrides = []): array
 {
     return array_replace([
@@ -93,10 +98,14 @@ it('names the field when the gateway omits one the type guarantees', function (s
     $data = wire();
     unset($data[$field]);
 
-    expect(fn () => new Transaction($data))
+    expect(fn (): Transaction => new Transaction($data))
         ->toThrow(MissingFieldException::class, "requires [$field]");
 })->with(['id', 'created', 'modified', 'serviceId', 'amount', 'orderId']);
 
+/**
+ * @param  array<array-key, mixed>  $data
+ * @return array<array-key, mixed>
+ */
 function sorted(array $data): array
 {
     ksort($data);
@@ -111,19 +120,20 @@ it('round-trips to the shape it was given', function (): void {
         'payment' => ['id' => 'payment-1', 'status' => 'settled'],
     ]);
 
-    expect(sorted((new Transaction($given))->toArray()))->toBe(sorted($given));
+    expect(sorted(new Transaction($given)->toArray()))->toBe(sorted($given));
 });
 
 it('emits fields in declaration order, whatever order they arrived in', function (): void {
     $shuffled = array_reverse(wire(), preserve_keys: true);
 
-    expect(array_keys((new Transaction($shuffled))->toArray()))
+    expect(array_keys(new Transaction($shuffled)->toArray()))
         ->toBe(['id', 'type', 'status', 'source', 'created', 'modified', 'serviceId', 'amount', 'currency', 'orderId']);
 });
 
 it('refuses to be modified after hydration', function (): void {
     $transaction = new Transaction(wire());
 
-    expect(fn () => $transaction->amount = 1)
-        ->toThrow(\Error::class, 'Cannot modify readonly property');
+    // @phpstan-ignore assign.propertyProtectedSet (refusing this at runtime is what the test asserts)
+    expect(fn (): int => $transaction->amount = 1)
+        ->toThrow(Error::class, 'Cannot modify readonly property');
 });

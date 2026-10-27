@@ -8,16 +8,9 @@ use InvalidArgumentException;
 
 class InvalidMultipayoutException extends InvalidArgumentException
 {
-    public readonly int $index;
-
-    public readonly string $field;
-
-    public function __construct(int $index, string $field, string $reason)
+    public function __construct(public readonly int $index, public readonly string $field, string $reason)
     {
-        $this->index = $index;
-        $this->field = $field;
-
-        parent::__construct("multipayout[$index][$field]: $reason");
+        parent::__construct("multipayout[{$this->index}][{$this->field}]: $reason");
     }
 
     /** @return array{index: int, field: string} */
