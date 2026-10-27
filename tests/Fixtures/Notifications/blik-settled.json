@@ -1,0 +1,6 @@
+{
+    "headers": {
+        "x-imoje-signature": "merchantid=fixturemerchant00001;serviceid=00000000-0000-4000-8000-000000000001;signature=c6e5005b0dc50ae6ce74bb6d9d1777054f85897f5352cb42eec38011f4f09a43;alg=sha256"
+    },
+    "body": "{\"transaction\":{\"id\":\"79333e36-883a-4566-a84e-97c933b37e19\",\"type\":\"sale\",\"status\":\"settled\",\"source\":\"api\",\"created\":1793090952,\"modified\":1793091008,\"notificationUrl\":\"https://example.test/notify\",\"serviceId\":\"00000000-0000-4000-8000-000000000001\",\"amount\":1000,\"currency\":\"PLN\",\"title\":\"\",\"orderId\":\"HOOK-fead3f98\",\"paymentMethod\":\"blik\",\"paymentMethodCode\":\"blik\"},\"payment\":{\"id\":\"79333e36-883a-4566-a84e-97c933b37e19\",\"title\":\"\",\"amount\":1000,\"status\":\"settled\",\"created\":1793090952,\"orderId\":\"HOOK-fead3f98\",\"currency\":\"PLN\",\"modified\":1793091008,\"serviceId\":\"00000000-0000-4000-8000-000000000001\",\"ipksef\":\"\",\"notificationUrl\":\"https://example.test/notify\"}}"
+}
