@@ -19,4 +19,31 @@ class PaymentMethodsResponse extends BaseResponse
     public readonly ?array $methods;
 
     public readonly ?int $timestamp;
+
+    /**
+     * The specification declares a bare list of methods. The gateway sends that
+     * same list wrapped in {timestamp, data}. Accept either, so the documented
+     * shape keeps working if ING ever drops the envelope.
+     *
+     * @param  array<array-key, mixed>  $body
+     * @return array<array-key, mixed>
+     */
+    protected function normalise(array $body): array
+    {
+        $data = $body['data'] ?? null;
+
+        $methods = match (true) {
+            array_is_list($body) => $body,
+            is_array($data) && array_is_list($data) => $data,
+            default => [],
+        };
+
+        return [
+            'methods' => array_map(
+                static fn (mixed $method): mixed => is_array($method) ? new PaymentMethodGroup($method) : $method,
+                $methods,
+            ),
+            'timestamp' => $body['timestamp'] ?? null,
+        ];
+    }
 }
