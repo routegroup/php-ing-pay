@@ -17,6 +17,7 @@
         }
     ],
     "require": {
+        "justinrainbow/json-schema": "^6.10.0",
         "php": "^8.4"
     },
     "require-dev": {
