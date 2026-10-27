@@ -32,6 +32,24 @@ abstract class Factory
 
     private ?Generator $faker = null;
 
+    /**
+     * Values every factory should bake in when the surrounding application has
+     * them — a merchant and service id, typically. The core has no
+     * configuration of its own, so it offers the seam and leaves filling it to
+     * whoever does: the Laravel package wires it to config() when testing.
+     *
+     * @var (Closure(): array<string, mixed>)|null
+     */
+    private static ?Closure $ambient = null;
+
+    /**
+     * @param  (Closure(): array<string, mixed>)|null  $resolver  null clears it
+     */
+    public static function resolveAmbientUsing(?Closure $resolver): void
+    {
+        self::$ambient = $resolver;
+    }
+
     public static function new(): static
     {
         // PHPStan cannot carry TPayload through new static(). The template is
@@ -106,6 +124,10 @@ abstract class Factory
     private function build(int $index, array $attributes): Payload
     {
         $values = $this->definition();
+
+        if (self::$ambient instanceof Closure) {
+            $values = array_replace($values, (self::$ambient)());
+        }
 
         foreach ($this->states as $state) {
             $values = array_replace($values, $state instanceof Closure ? $state($values) : $state);
