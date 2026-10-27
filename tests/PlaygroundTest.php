@@ -66,4 +66,7 @@ function playgroundApi(): Api
 
 it('is for playground purposes', function (): void {
     $api = playgroundApi();
-})->skip(fn (): bool => playgroundEnv('PLAYGROUND') === null, 'playground disabled');
+    // Read from the process rather than from .env: the credentials file lives
+    // here permanently now, so a PLAYGROUND line in it would quietly point the
+    // ordinary test run at the live gateway.
+})->skip(fn (): bool => getenv('PLAYGROUND') === false, 'playground disabled');

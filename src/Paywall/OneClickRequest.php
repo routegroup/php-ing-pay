@@ -7,6 +7,7 @@ namespace Routegroup\IngPay\Paywall;
 use Routegroup\IngPay\Concerns\CarriesIdentity;
 use Routegroup\IngPay\Concerns\HasFactory;
 use Routegroup\IngPay\Factories\Paywall\OneClickRequestFactory;
+use Routegroup\IngPay\HasUnsignedFields;
 use Routegroup\IngPay\Identified;
 use Routegroup\IngPay\Payload;
 use Routegroup\IngPay\Types\Currency;
@@ -16,7 +17,7 @@ use Routegroup\IngPay\Types\WidgetType;
 /**
  * @method static OneClickRequestFactory factory()
  */
-class OneClickRequest extends Payload implements Identified
+class OneClickRequest extends Payload implements HasUnsignedFields, Identified
 {
     use CarriesIdentity;
     use HasFactory;
@@ -26,6 +27,24 @@ class OneClickRequest extends Payload implements Identified
 
     /** Configuration of the widget itself, which the chapter excludes from the signature. */
     public const UNSIGNED = ['locale', 'inline', 'elementId', 'elementEvent'];
+
+    /** The widget defaults to one-click; the gateway refuses a request without it. */
+    protected bool $strictEnums = true;
+
+    /** @param array<array-key, mixed> $attributes */
+    public function __construct($attributes = [])
+    {
+        parent::__construct([
+            'widgetType' => WidgetType::ONECLICK,
+            ...(array) $attributes,
+        ]);
+    }
+
+    /** @return list<string> */
+    public function unsignedFields(): array
+    {
+        return self::UNSIGNED;
+    }
 
     public readonly ?string $serviceId;
 

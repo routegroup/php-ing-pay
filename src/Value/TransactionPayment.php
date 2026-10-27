@@ -34,4 +34,10 @@ class TransactionPayment extends Payload
     public readonly int $modified;
 
     public readonly string $serviceId;
+
+    /** Where the gateway said it would notify; it echoes this back. */
+    public readonly ?string $notificationUrl;
+
+    /** The invoice's identifier in KSeF, empty until one is issued. */
+    public readonly ?string $ipksef;
 }
