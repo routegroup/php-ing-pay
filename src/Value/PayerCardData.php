@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace Routegroup\IngPay\Value;
 
+use Routegroup\IngPay\Concerns\HasFactory;
+use Routegroup\IngPay\Factories\Value\PayerCardDataFactory;
 use Routegroup\IngPay\Payload;
 
+/**
+ * @method static PayerCardDataFactory factory()
+ */
 class PayerCardData extends Payload
 {
+    use HasFactory;
+
     public readonly ?string $brand;
 
     public readonly ?string $bin;

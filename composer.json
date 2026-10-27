@@ -20,6 +20,7 @@
         "php": "^8.4"
     },
     "require-dev": {
+        "fakerphp/faker": "^1.24",
         "laravel/pint": "^1.30.5",
         "pestphp/pest": "^5.3.3",
         "pestphp/pest-plugin-phpstan": "^5.2",
@@ -61,5 +62,8 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "suggest": {
+        "fakerphp/faker": "Required by the test factories (Payload::factory()); this package does not need it at runtime."
+    }
 }

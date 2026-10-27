@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Routegroup\IngPay\Value;
 
+use Routegroup\IngPay\Concerns\HasFactory;
+use Routegroup\IngPay\Factories\Value\TransactionFactory;
 use Routegroup\IngPay\Payload;
 use Routegroup\IngPay\Types\Currency;
 use Routegroup\IngPay\Types\PaymentMethod;
@@ -12,8 +14,13 @@ use Routegroup\IngPay\Types\TransactionSource;
 use Routegroup\IngPay\Types\TransactionStatus;
 use Routegroup\IngPay\Types\TransactionType;
 
+/**
+ * @method static TransactionFactory factory()
+ */
 class Transaction extends Payload
 {
+    use HasFactory;
+
     public readonly string $id;
 
     public readonly ?TransactionType $type;
