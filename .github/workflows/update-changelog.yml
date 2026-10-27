@@ -1,0 +1,42 @@
+name: "Update Changelog"
+
+on:
+  release:
+    types: [released]
+  workflow_dispatch:
+    inputs:
+      latest-version:
+        description: Version to add to the changelog
+        required: true
+        type: string
+      release-notes:
+        description: Release notes
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Update Changelog
+        uses: stefanzweifel/changelog-updater-action@v1
+        with:
+          latest-version: ${{ github.event.release.name || inputs.latest-version }}
+          release-notes: ${{ github.event.release.body || inputs.release-notes }}
+
+      - name: Commit updated CHANGELOG
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          branch: main
+          commit_message: Update CHANGELOG
+          file_pattern: CHANGELOG.md
