@@ -68,7 +68,7 @@ abstract class Factory
         return new static;
     }
 
-    /** @return array<string, mixed> */
+    /** @return array<array-key, mixed> The gateway answers some endpoints with a list, not an object. */
     abstract protected function definition(): array;
 
     /**
@@ -148,7 +148,39 @@ abstract class Factory
             $values = array_replace($values, $this->sequence[$index % count($this->sequence)]);
         }
 
-        return new $this->payload(array_replace($values, $attributes));
+        return $this->instantiate(self::resolve(array_replace($values, $attributes)));
+    }
+
+    /**
+     * A factory handed in as a value builds itself, so a definition can nest
+     * one without every author remembering ->make().
+     *
+     * @param  array<array-key, mixed>  $values
+     * @return array<array-key, mixed>
+     */
+    private static function resolve(array $values): array
+    {
+        return array_map(
+            static fn (mixed $value): mixed => match (true) {
+                $value instanceof self => $value->make(),
+                is_array($value) => self::resolve($value),
+                default => $value,
+            },
+            $values,
+        );
+    }
+
+    /**
+     * How a payload is built from the values a factory settled on. Responses
+     * need an answer rather than an array, so they override this instead of the
+     * base knowing anything about HTTP.
+     *
+     * @param  array<string, mixed>  $values
+     * @return TPayload
+     */
+    protected function instantiate(array $values): Payload
+    {
+        return new $this->payload($values);
     }
 
     protected function faker(): Generator

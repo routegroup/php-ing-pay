@@ -11,6 +11,7 @@ use Routegroup\IngPay\Types\PaymentMethodCode;
 use Routegroup\IngPay\Types\TransactionSource;
 use Routegroup\IngPay\Types\TransactionStatus;
 use Routegroup\IngPay\Types\TransactionType;
+use Routegroup\IngPay\Value\PaymentProfile;
 use Routegroup\IngPay\Value\Transaction;
 
 /** @extends Factory<Transaction> */
@@ -49,5 +50,40 @@ class TransactionFactory extends Factory
             'payerCardData' => PayerCardDataFactory::new()->make(),
             'fee' => FeeFactory::new()->make(),
         ]);
+    }
+
+    public function asApiPending(): static
+    {
+        return $this->state([
+            'type' => TransactionType::SALE,
+            'status' => TransactionStatus::PENDING,
+            'source' => TransactionSource::API,
+            'notificationUrl' => 'https://example.com/notification',
+        ]);
+    }
+
+    public function asApiRefund(): static
+    {
+        return $this->state([
+            'type' => TransactionType::REFUND,
+            'status' => TransactionStatus::SETTLED,
+            'source' => TransactionSource::API,
+        ]);
+    }
+
+    public function asOneClick(): static
+    {
+        return $this->state([
+            'type' => TransactionType::SALE,
+            'status' => TransactionStatus::SETTLED,
+            'source' => TransactionSource::WEB,
+            'paymentMethod' => PaymentMethod::CARD,
+            'paymentMethodCode' => PaymentMethodCode::ONECLICK,
+        ]);
+    }
+
+    public function withPaymentProfile(): static
+    {
+        return $this->state(['paymentProfile' => PaymentProfile::factory()->make()]);
     }
 }

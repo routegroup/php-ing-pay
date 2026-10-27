@@ -22,4 +22,6 @@ parameters:
             identifier: property.uninitializedReadonly
             paths:
                 - src/Value/*
+                - src/Response/*
+                - src/Notification/*
                 - tests/Fixtures/*

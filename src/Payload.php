@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Routegroup\IngPay;
 
 use BackedEnum;
+use JsonSerializable;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionProperty;
@@ -15,7 +16,7 @@ use Routegroup\IngPay\Exceptions\MissingFieldException;
  * what the field is, whether it may be absent, and how an incoming value is
  * converted. Nothing is declared twice.
  */
-abstract class Payload
+abstract class Payload implements JsonSerializable
 {
     /** An unknown enum value hydrates to null; a payload may ask to be strict instead. */
     protected bool $strictEnums = false;
@@ -28,6 +29,12 @@ abstract class Payload
 
             $this->$name = $this->read($field, $attributes[$name] ?? null);
         }
+    }
+
+    /** @return array<string, mixed> */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 
     /** @return array<string, mixed> */
