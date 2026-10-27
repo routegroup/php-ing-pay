@@ -34,7 +34,7 @@ configuration, hand the base a resolver once, during test bootstrapping:
 ```php
 use Routegroup\IngPay\Factories\Factory;
 
-Factory::useSharedState(fn (): array => [
+Factory::useSharedState([
     'merchantId' => $yourMerchantId,
     'serviceId' => $yourServiceId,
 ]);
@@ -42,11 +42,18 @@ Factory::useSharedState(fn (): array => [
 
 Every payload built afterwards carries those values, and keys a payload does not
 declare are ignored, so one resolver serves the whole model. A `state()` or an
-argument to `make()` still wins over them, in that order. Pass `null` to clear it.
+argument to `make()` still wins over them, in that order, and
+`Factory::flushSharedState()` clears them again — worth doing in a test
+teardown, since the state is static.
 
-The resolver runs per payload rather than once, so it may read whatever the
-surrounding application holds at that moment. In Laravel that is `config()`; the
-companion package wires it for you.
+Pass a closure instead when the values are not known yet, or change between
+payloads — it is resolved once per payload rather than captured:
+
+```php
+Factory::useSharedState(fn (): array => ['serviceId' => config('services.ing_pay.service_id')]);
+```
+
+In Laravel the companion package wires that for you.
 
 ## Development
 

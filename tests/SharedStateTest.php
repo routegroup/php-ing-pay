@@ -8,7 +8,7 @@ use Routegroup\IngPay\Factories\Factory;
 use Routegroup\IngPay\Value\Transaction;
 
 afterEach(function (): void {
-    Factory::useSharedState(null);
+    Factory::flushSharedState();
 });
 
 it('leaves the definition alone when nothing resolves shared state', function (): void {
@@ -66,9 +66,15 @@ it('is resolved afresh for every payload, not captured once', function (): void 
         ->toBe(['call-1', 'call-2', 'call-3']);
 });
 
-it('stops applying them once cleared', function (): void {
+it('accepts a plain array when the values are already known', function (): void {
+    Factory::useSharedState(['serviceId' => 'service-from-array']);
+
+    expect(Transaction::factory()->make()->serviceId)->toBe('service-from-array');
+});
+
+it('stops applying them once flushed', function (): void {
     Factory::useSharedState(fn (): array => ['serviceId' => 'service-from-config']);
-    Factory::useSharedState(null);
+    Factory::flushSharedState();
 
     expect(Transaction::factory()->make()->serviceId)->not->toBe('service-from-config');
 });

@@ -38,19 +38,26 @@ abstract class Factory
      * configuration of its own, so it offers the seam and leaves filling it to
      * whoever does: the Laravel package wires it to config() when testing.
      *
-     * @var (Closure(): array<string, mixed>)|null
+     * @var array<string, mixed>|(Closure(): array<string, mixed>)|null
      */
-    private static ?Closure $sharedState = null;
+    private static array|Closure|null $sharedState = null;
 
     /**
      * State shared by every factory, applied before a factory's own state() so
-     * either can still override it.
+     * either can still override it. Pass a closure instead of an array when the
+     * values are not known yet, or change between payloads: it is resolved once
+     * per payload rather than captured here.
      *
-     * @param  (Closure(): array<string, mixed>)|null  $resolver  null clears it
+     * @param  array<string, mixed>|(Closure(): array<string, mixed>)  $state
      */
-    public static function useSharedState(?Closure $resolver): void
+    public static function useSharedState(array|Closure $state): void
     {
-        self::$sharedState = $resolver;
+        self::$sharedState = $state;
+    }
+
+    public static function flushSharedState(): void
+    {
+        self::$sharedState = null;
     }
 
     public static function new(): static
@@ -128,8 +135,9 @@ abstract class Factory
     {
         $values = $this->definition();
 
-        if (self::$sharedState instanceof Closure) {
-            $values = array_replace($values, (self::$sharedState)());
+        if (self::$sharedState !== null) {
+            $shared = self::$sharedState;
+            $values = array_replace($values, $shared instanceof Closure ? $shared() : $shared);
         }
 
         foreach ($this->states as $state) {
