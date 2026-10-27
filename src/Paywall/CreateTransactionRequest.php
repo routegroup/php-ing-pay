@@ -10,6 +10,8 @@ use Routegroup\IngPay\Factories\Paywall\CreateTransactionRequestFactory;
 use Routegroup\IngPay\Identified;
 use Routegroup\IngPay\Payload;
 use Routegroup\IngPay\Types\Currency;
+use Routegroup\IngPay\Value\Cart;
+use Routegroup\IngPay\Value\Invoice;
 
 /**
  * @method static CreateTransactionRequestFactory factory()
@@ -53,5 +55,9 @@ class CreateTransactionRequest extends Payload implements Identified
 
     public readonly ?int $validTo;
 
-    public readonly ?string $cart;
+    /** Held as a value; the paywall channel encodes it when building the url. */
+    public readonly ?Cart $cart;
+
+    /** Held as a value; the paywall channel encodes it when building the url. */
+    public readonly ?Invoice $invoice;
 }
