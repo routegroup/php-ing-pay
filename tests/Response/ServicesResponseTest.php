@@ -6,7 +6,6 @@ namespace Routegroup\IngPay\Tests\Response;
 
 use Routegroup\IngPay\Http\Response as HttpResponse;
 use Routegroup\IngPay\Response\ServicesResponse;
-use Routegroup\IngPay\Value\ServiceData;
 
 function servicesBody(int $count = 2): string
 {
@@ -28,7 +27,7 @@ it('hydrates the top-level list the endpoint answers with', function (): void {
     $response = new ServicesResponse(new HttpResponse(200, servicesBody(3)));
 
     expect($response->services)->toHaveCount(3)
-        ->and($response->services[0])->toBeInstanceOf(ServiceData::class);
+        ->and($response->services[2]->id)->toBe('service-2');
 });
 
 it('unwraps each service from its envelope', function (): void {
