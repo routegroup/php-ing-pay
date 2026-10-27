@@ -12,3 +12,8 @@ node_modules
 
 # Written by the sandbox run: the widget page and the notifications it catches.
 .sandbox/
+
+# The browser step that registers a card profile.
+node_modules/
+test-results/
+playwright-report/
