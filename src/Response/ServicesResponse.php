@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Routegroup\IngPay\Response;
 
+use Routegroup\IngPay\Attributes\ListOf;
 use Routegroup\IngPay\Concerns\HasFactory;
 use Routegroup\IngPay\Factories\Response\ServicesResponseFactory;
 use Routegroup\IngPay\Value\ServiceData;
@@ -16,6 +17,7 @@ class ServicesResponse extends BaseResponse
     use HasFactory;
 
     /** @var list<ServiceData>|null */
+    #[ListOf(ServiceData::class)]
     public readonly ?array $services;
 
     /**
@@ -28,9 +30,9 @@ class ServicesResponse extends BaseResponse
     protected function normalise(array $body): array
     {
         return ['services' => array_map(
-            static fn (mixed $item): ServiceData => new ServiceData(
-                is_array($item) && is_array($item['service'] ?? null) ? $item['service'] : []
-            ),
+            static fn (mixed $item): mixed => is_array($item) && is_array($item['service'] ?? null)
+                ? $item['service']
+                : [],
             array_is_list($body) ? $body : [],
         )];
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Routegroup\IngPay\Response;
 
+use Routegroup\IngPay\Attributes\ListOf;
 use Routegroup\IngPay\Concerns\HasFactory;
 use Routegroup\IngPay\Factories\Response\ApiErrorResponseFactory;
 use Routegroup\IngPay\Http\Response as HttpResponse;
@@ -27,6 +28,7 @@ class ApiErrorResponse extends Payload
     public readonly mixed $instance;
 
     /** @var list<ApiError>|array<array-key, mixed> */
+    #[ListOf(ApiError::class)]
     public readonly array $errors;
 
     public static function fromResponse(HttpResponse $response): self
@@ -42,15 +44,8 @@ class ApiErrorResponse extends Payload
     {
         $attributes = (array) $attributes;
 
-        // The gateway sends a list of {property, message}; anything else it has
-        // never sent rides through as it arrived.
-        $errors = $attributes['errors'] ?? null;
-        $attributes['errors'] = is_array($errors)
-            ? array_map(
-                static fn (mixed $error): mixed => is_array($error) ? new ApiError($error) : $error,
-                $errors,
-            )
-            : [];
+        // A field the gateway omits still has to satisfy a non-nullable array.
+        $attributes['errors'] = is_array($attributes['errors'] ?? null) ? $attributes['errors'] : [];
 
         parent::__construct($attributes);
     }

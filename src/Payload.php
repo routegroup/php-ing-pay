@@ -9,6 +9,7 @@ use JsonSerializable;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionProperty;
+use Routegroup\IngPay\Attributes\ListOf;
 use Routegroup\IngPay\Exceptions\MissingFieldException;
 
 /**
@@ -78,7 +79,23 @@ abstract class Payload implements JsonSerializable
                 : throw new MissingFieldException(static::class, $field->getName(), $type->getName());
         }
 
+        if ($type->getName() === 'array' && is_array($value)) {
+            $element = $this->elementType($field);
+
+            if ($element !== null) {
+                return array_map(fn (mixed $item): mixed => $this->convert($element, $item), $value);
+            }
+        }
+
         return $this->convert($type->getName(), $value);
+    }
+
+    /** @return class-string|null */
+    private function elementType(ReflectionProperty $field): ?string
+    {
+        $attribute = $field->getAttributes(ListOf::class)[0] ?? null;
+
+        return $attribute?->newInstance()->type;
     }
 
     private function convert(string $type, mixed $value): mixed

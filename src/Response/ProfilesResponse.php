@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Routegroup\IngPay\Response;
 
+use Routegroup\IngPay\Attributes\ListOf;
 use Routegroup\IngPay\Concerns\HasFactory;
 use Routegroup\IngPay\Factories\Response\ProfilesResponseFactory;
 use Routegroup\IngPay\Value\PaymentProfile;
@@ -16,5 +17,6 @@ class ProfilesResponse extends BaseResponse
     use HasFactory;
 
     /** @var list<PaymentProfile>|null */
+    #[ListOf(PaymentProfile::class)]
     public readonly ?array $paymentProfiles;
 }
