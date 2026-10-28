@@ -34,3 +34,21 @@ it('brings a refusal back rather than raising inside guzzle', function (): void 
     expect($answer->failed())->toBeTrue()
         ->and($answer->status)->toBe(422);
 });
+
+it('declares json on a post that carries nothing', function (): void {
+    $mock = new MockHandler([new GuzzleResponse(200, [], '{}')]);
+
+    Psr18Client::guzzle(['handler' => HandlerStack::create($mock)])
+        ->send(Request::post('https://api.sandbox.pay.ing.pl/v1/transaction/abc/capture'));
+
+    expect($mock->getLastRequest()?->getHeaderLine('Content-Type'))->toBe('application/json');
+});
+
+it('leaves a get without a content type', function (): void {
+    $mock = new MockHandler([new GuzzleResponse(200, [], '{}')]);
+
+    Psr18Client::guzzle(['handler' => HandlerStack::create($mock)])
+        ->send(Request::get('https://api.sandbox.pay.ing.pl/v1/transaction/abc'));
+
+    expect($mock->getLastRequest()?->getHeaderLine('Content-Type'))->toBe('');
+});

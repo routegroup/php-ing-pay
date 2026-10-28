@@ -20,10 +20,17 @@ class Request
         public readonly array $headers = [],
     ) {}
 
+    /**
+     * The gateway rejects a POST without this header even when there is
+     * nothing to send, so it belongs to the request rather than to whichever
+     * adapter happens to carry it.
+     */
+    public const JSON = ['Content-Type' => 'application/json'];
+
     /** @param array<string, mixed> $body */
     public static function post(string $url, array $body = []): self
     {
-        return new self('POST', $url, $body);
+        return new self('POST', $url, $body, self::JSON);
     }
 
     public static function get(string $url): self
@@ -39,7 +46,7 @@ class Request
     /** @param array<string, mixed> $body */
     public static function put(string $url, array $body = []): self
     {
-        return new self('PUT', $url, $body);
+        return new self('PUT', $url, $body, self::JSON);
     }
 
     /** @param array<string, string> $headers */
