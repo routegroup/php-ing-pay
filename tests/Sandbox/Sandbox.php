@@ -20,6 +20,8 @@ final class Sandbox
 {
     public const int PORT = 8000;
 
+    public const string NO_CREDENTIALS = 'sandbox credentials are not set; see .env.example';
+
     public const array CREDENTIALS = [
         'ING_PAY_MERCHANT_ID',
         'ING_PAY_SERVICE_ID',
@@ -59,6 +61,11 @@ final class Sandbox
     public static function missing(): array
     {
         return array_values(array_filter(self::CREDENTIALS, static fn (string $key): bool => self::value($key) === null));
+    }
+
+    public static function isConfigured(): bool
+    {
+        return self::missing() === [];
     }
 
     public static function config(): Config

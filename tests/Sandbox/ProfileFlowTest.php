@@ -89,6 +89,6 @@ it('charges, refunds and retires a profile the widget registered', function (): 
 
     expect($again->http()->status)->toBe(200);
 })->skip(
-    fn (): bool => ! sandboxIsConfigured() || Sandbox::value('SANDBOX_CID') === null,
+    fn (): bool => ! Sandbox::isConfigured() || Sandbox::value('SANDBOX_CID') === null,
     'needs the profile the browser step registers, named in SANDBOX_CID',
 );
