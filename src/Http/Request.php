@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Routegroup\IngPay\Http;
 
-/**
- * What the gateway is asked for, independent of how it is sent.
- */
 class Request
 {
     /**
@@ -20,10 +17,13 @@ class Request
         public readonly array $headers = [],
     ) {}
 
+    /** Required even when there is nothing to send. */
+    public const JSON = ['Content-Type' => 'application/json'];
+
     /** @param array<string, mixed> $body */
     public static function post(string $url, array $body = []): self
     {
-        return new self('POST', $url, $body);
+        return new self('POST', $url, $body, self::JSON);
     }
 
     public static function get(string $url): self
@@ -39,7 +39,7 @@ class Request
     /** @param array<string, mixed> $body */
     public static function put(string $url, array $body = []): self
     {
-        return new self('PUT', $url, $body);
+        return new self('PUT', $url, $body, self::JSON);
     }
 
     /** @param array<string, string> $headers */

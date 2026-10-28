@@ -14,10 +14,7 @@ use Routegroup\IngPay\Notification\RefundNotification;
 use Routegroup\IngPay\Payload;
 use Routegroup\IngPay\Types\Environment;
 
-/**
- * Bodies the sandbox really sent, scrubbed of the merchant they were issued
- * for and re-signed under a key that exists only here.
- */
+/** Re-signed under a key that exists only here; see the fixtures' README. */
 function recordedConfig(): Config
 {
     return new Config(
@@ -59,8 +56,7 @@ function droppedFields(array $sent, array $kept, string $path = ''): array
     foreach ($sent as $key => $value) {
         $here = $path === '' ? (string) $key : $path.'.'.$key;
 
-        // toArray() omits nulls by design, so a key the gateway sent as null
-        // is not lost: the property is there and reads null.
+        // toArray() omits nulls, so a null the gateway sent is not a loss.
         if (! array_key_exists($key, $kept)) {
             if ($value !== null) {
                 $dropped[] = $here;

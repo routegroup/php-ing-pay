@@ -11,11 +11,7 @@ use Routegroup\IngPay\Api\RefundRequest;
 use Routegroup\IngPay\Types\Currency;
 use Routegroup\IngPay\Value\PaymentProfile;
 
-/**
- * One test, not several: the suite runs in random order and every step here
- * stands on the one before it. The profile it reads was registered by the
- * browser step, which named the customer id in SANDBOX_CID.
- */
+/** One test, not several: the suite runs in random order and these steps chain. */
 it('charges, refunds and retires a profile the widget registered', function (): void {
     $api = Sandbox::api();
     $cid = (string) Sandbox::value('SANDBOX_CID');
@@ -48,8 +44,7 @@ it('charges, refunds and retires a profile the widget registered', function (): 
 
     $chargeId = $charge->id;
 
-    // One notification, already settled: waiting for pending to become settled
-    // would wait forever on this path.
+    // One notification, already settled; there is no pending to wait for.
     $settled = Notifications::waitFor(
         fn (array $payload): bool => Notifications::isFor($payload, $chargeId, 'settled'),
         'the charge to be notified',
@@ -73,14 +68,12 @@ it('charges, refunds and retires a profile the widget registered', function (): 
         'the refund to settle',
     );
 
-    // The specification calls a refund entry shapeless; the gateway sends
-    // {transaction: {...}} for each one.
     $refunds = $api->getTransaction($chargeId)->transaction->refunds ?? [];
 
     expect($refunds)->toHaveCount(1)
         ->and($refunds[0]['transaction']['id'] ?? null)->toBe($refundId);
 
-    // Not cleanup — the sandbox is never cleaned up. This asserts the flag moves.
+    // An assertion that the flag moves, not cleanup.
     $api->deactivateProfile($id);
 
     expect($api->getProfile($id)->paymentProfile?->isActive)->toBeFalse();
@@ -89,6 +82,6 @@ it('charges, refunds and retires a profile the widget registered', function (): 
 
     expect($again->http()->status)->toBe(200);
 })->skip(
-    fn (): bool => ! sandboxIsConfigured() || Sandbox::value('SANDBOX_CID') === null,
+    fn (): bool => ! Sandbox::isConfigured() || Sandbox::value('SANDBOX_CID') === null,
     'needs the profile the browser step registers, named in SANDBOX_CID',
 );

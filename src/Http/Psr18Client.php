@@ -52,7 +52,6 @@ class Psr18Client implements Client
 
         if ($request->body !== []) {
             $psr = $psr
-                ->withHeader('Content-Type', 'application/json')
                 ->withBody($this->streams->createStream(
                     json_encode($request->body, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
                 ));

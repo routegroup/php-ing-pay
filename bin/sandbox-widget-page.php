@@ -1,13 +1,9 @@
 <?php
 
 /**
- * Writes the signed card widget page the browser step drives, and names the
- * customer id the rest of the run will look the profile up by.
+ * Writes the signed widget page and names the customer id to look up by.
  *
  *   php bin/sandbox-widget-page.php
- *
- * A paywall url is a different channel: it ignores widgetType and can never
- * register a profile. Only this script tag can.
  */
 declare(strict_types=1);
 

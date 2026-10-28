@@ -13,11 +13,8 @@ use Routegroup\IngPay\Types\Currency;
 use Routegroup\IngPay\Types\PaymentMethod;
 use Routegroup\IngPay\Types\PaymentMethodCode;
 use Routegroup\IngPay\Types\TransactionType;
+use RuntimeException;
 
-/**
- * Nothing here is ever paid: these exercise what leaves this package and what
- * the gateway answers, which the read-only calls never touch.
- */
 it('creates a transaction and reads back what it sent', function (): void {
     $api = Sandbox::api();
     $orderId = Sandbox::orderId('CI-BLIK');
@@ -46,7 +43,7 @@ it('creates a transaction and reads back what it sent', function (): void {
         // Stored and echoed, but delivery still goes to the address configured
         // on the service: the gateway notifies one url and only one.
         ->and($read->notificationUrl)->toBe($notificationUrl);
-})->skip(fn (): bool => ! sandboxIsConfigured(), NO_CREDENTIALS);
+})->skip(fn (): bool => ! Sandbox::isConfigured(), Sandbox::NO_CREDENTIALS);
 
 it('opens a payment link, reads it, and cancels it', function (): void {
     $api = Sandbox::api();
@@ -78,7 +75,7 @@ it('opens a payment link, reads it, and cancels it', function (): void {
     // isActive stays true after a cancel; the status is what moves.
     expect($cancelled->status?->value)->toBe('cancelled')
         ->and($cancelled->isActive)->toBeTrue();
-})->skip(fn (): bool => ! sandboxIsConfigured(), NO_CREDENTIALS);
+})->skip(fn (): bool => ! Sandbox::isConfigured(), Sandbox::NO_CREDENTIALS);
 
 it('will not refund a transaction nobody paid', function (): void {
     $api = Sandbox::api();
@@ -100,4 +97,33 @@ it('will not refund a transaction nobody paid', function (): void {
         new CanRefundRequest(['amount' => 1000, 'currency' => Currency::PLN]),
         $created->id,
     ))->toThrow(ApiErrorException::class);
-})->skip(fn (): bool => ! sandboxIsConfigured(), NO_CREDENTIALS);
+})->skip(fn (): bool => ! Sandbox::isConfigured(), Sandbox::NO_CREDENTIALS);
+
+it('reaches capture and void well-formed, and is told the status is wrong', function (string $method): void {
+    $api = Sandbox::api();
+
+    $created = $api->createTransaction(new CreateTransactionRequest([
+        'type' => TransactionType::SALE,
+        'amount' => 1000,
+        'currency' => Currency::PLN,
+        'orderId' => Sandbox::orderId('CI-TWOPHASE'),
+        'paymentMethod' => PaymentMethod::BLIK,
+        'paymentMethodCode' => PaymentMethodCode::BLIK,
+        'successReturnUrl' => 'https://example.test/success',
+        'failureReturnUrl' => 'https://example.test/failure',
+        'customer' => ['firstName' => 'Anna', 'lastName' => 'Kowalska', 'email' => 'anna@example.test'],
+    ]))->transaction;
+
+    try {
+        $api->$method($created->id);
+    } catch (ApiErrorException $exception) {
+        // 422 means well formed but wrong state; 400 would mean the content
+        // type went missing again.
+        expect($exception->status())->toBe(422);
+
+        return;
+    }
+
+    throw new RuntimeException($method.' captured a transaction nobody authorised');
+})->with(['captureTransaction', 'voidTransaction'])
+    ->skip(fn (): bool => ! Sandbox::isConfigured(), Sandbox::NO_CREDENTIALS);

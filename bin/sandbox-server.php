@@ -1,17 +1,11 @@
 <?php
 
 /**
- * The runner's one web process: serves the widget page and catches the
- * gateway's notifications.
+ * Serves the widget page and catches the gateway's notifications.
  *
  *   php -S 127.0.0.1:8000 bin/sandbox-server.php
  *
- * Both verbs live here on purpose. Playwright needs the widget page over http
- * from a real origin, and ultrahook forwards the gateway's POSTs to the same
- * runner; one process and one port is less to go wrong than two.
- *
- * The raw body matters: re-encoding it changes slash escaping and the
- * signature stops matching, which is the thing being verified.
+ * The body is stored raw: re-encoding breaks the signature.
  */
 declare(strict_types=1);
 

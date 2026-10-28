@@ -10,15 +10,12 @@ use Routegroup\IngPay\Lib\Config;
 use Routegroup\IngPay\Lib\Url;
 use Routegroup\IngPay\Types\Environment;
 
-/**
- * Everything the sandbox run needs to know about its surroundings.
- *
- * Credentials come from a .env locally and from the environment in CI; both
- * shapes are read here so the scripts and the suite agree on one source.
- */
+/** Credentials come from .env locally and from the environment in CI. */
 final class Sandbox
 {
     public const int PORT = 8000;
+
+    public const string NO_CREDENTIALS = 'sandbox credentials are not set; see .env.example';
 
     public const array CREDENTIALS = [
         'ING_PAY_MERCHANT_ID',
@@ -36,8 +33,7 @@ final class Sandbox
 
             $path = self::root().'/.env';
 
-            // Not @file(): the suppression still reaches PHPUnit as a warning,
-            // and CI never has this file.
+            // Not @file(): PHPUnit still reports the suppressed warning.
             $lines = is_file($path) ? file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) : [];
 
             foreach ($lines ?: [] as $line) {
@@ -59,6 +55,11 @@ final class Sandbox
     public static function missing(): array
     {
         return array_values(array_filter(self::CREDENTIALS, static fn (string $key): bool => self::value($key) === null));
+    }
+
+    public static function isConfigured(): bool
+    {
+        return self::missing() === [];
     }
 
     public static function config(): Config
@@ -99,7 +100,6 @@ final class Sandbox
         return $path;
     }
 
-    /** Tags what this run leaves behind, since the sandbox is never cleaned up. */
     public static function orderId(string $prefix): string
     {
         return sprintf('%s-%s-%s', $prefix, self::value('GITHUB_RUN_ID') ?? 'local', bin2hex(random_bytes(3)));

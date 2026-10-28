@@ -11,20 +11,13 @@ use Routegroup\IngPay\Value\PaymentMethodGroup;
 use Routegroup\IngPay\Value\ServiceData;
 use Routegroup\IngPay\Value\ServicePaymentMethod;
 
-function sandboxIsConfigured(): bool
-{
-    return Sandbox::missing() === [];
-}
-
-const NO_CREDENTIALS = 'sandbox credentials are not set; see .env.example';
-
 it('lists the services the merchant has', function (): void {
     $services = Sandbox::api()->getServices()->services ?? [];
 
     expect($services)->not->toBeEmpty()
         ->and($services[0])->toBeInstanceOf(ServiceData::class)
         ->and($services[0]->id)->not->toBeEmpty();
-})->skip(fn (): bool => ! sandboxIsConfigured(), NO_CREDENTIALS);
+})->skip(fn (): bool => ! Sandbox::isConfigured(), Sandbox::NO_CREDENTIALS);
 
 it('reads back the service it is configured for', function (): void {
     $config = Sandbox::config();
@@ -33,7 +26,7 @@ it('reads back the service it is configured for', function (): void {
 
     expect($service->id)->toBe($config->serviceId)
         ->and($service->paymentMethods[0] ?? null)->toBeInstanceOf(ServicePaymentMethod::class);
-})->skip(fn (): bool => ! sandboxIsConfigured(), NO_CREDENTIALS);
+})->skip(fn (): bool => ! Sandbox::isConfigured(), Sandbox::NO_CREDENTIALS);
 
 it('lists payment methods as objects, down to the channels', function (): void {
     $methods = Sandbox::api()->getPaymentMethods(
@@ -44,11 +37,11 @@ it('lists payment methods as objects, down to the channels', function (): void {
     expect($methods)->not->toBeEmpty()
         ->and($methods[0])->toBeInstanceOf(PaymentMethodGroup::class)
         ->and($methods[0]->channels[0] ?? null)->toBeInstanceOf(PaymentMethodChannel::class);
-})->skip(fn (): bool => ! sandboxIsConfigured(), NO_CREDENTIALS);
+})->skip(fn (): bool => ! Sandbox::isConfigured(), Sandbox::NO_CREDENTIALS);
 
 it('answers which addresses the merchant trusts', function (): void {
     $response = Sandbox::api()->getTrustedIps();
 
     expect($response->http()->status)->toBe(200)
         ->and($response->trustedIps)->toBeArray();
-})->skip(fn (): bool => ! sandboxIsConfigured(), NO_CREDENTIALS);
+})->skip(fn (): bool => ! Sandbox::isConfigured(), Sandbox::NO_CREDENTIALS);

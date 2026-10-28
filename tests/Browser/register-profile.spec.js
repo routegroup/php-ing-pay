@@ -1,14 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
 
-/**
- * The gateway's own widget, in its own cross-origin iframe. The parent page
- * cannot reach into it, which is why this runs in a browser rather than in the
- * PHP suite: frameLocator drives the browser, so the same-origin policy does
- * not apply.
- *
- * Published sandbox test card, no 3DS, expected to authorise.
- */
+/** Published sandbox test card, no 3DS. */
 const CARD = {
     number: '4111111111111111',
     month: '12',
@@ -28,8 +21,7 @@ test('registers a card profile through the widget', async ({ page }) => {
 
     await cardNumber.fill(CARD.number);
 
-    // The expiry selects carry no accessible name: their labels sit beside
-    // them rather than being tied to them. Position is all there is.
+    // The expiry selects carry no accessible name; position is all there is.
     const selects = widget.locator('select');
 
     await expect(selects, 'the expiry fields are not the two selects this expects').toHaveCount(2);
@@ -43,7 +35,6 @@ test('registers a card profile through the widget', async ({ page }) => {
 
     await widget.getByRole('button', { name: 'Zapłać' }).click();
 
-    // The flow may finish inside the iframe or redirect the page that holds it.
     await Promise.race([
         page.waitForURL(/r=success/, { timeout: 90_000 }),
         widget.getByText('Płatność została przetworzona pomyślnie').waitFor({ state: 'visible', timeout: 90_000 }),
