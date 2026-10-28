@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Routegroup\IngPay\Http;
 
-/**
- * What the gateway is asked for, independent of how it is sent.
- */
 class Request
 {
     /**
@@ -20,11 +17,7 @@ class Request
         public readonly array $headers = [],
     ) {}
 
-    /**
-     * The gateway rejects a POST without this header even when there is
-     * nothing to send, so it belongs to the request rather than to whichever
-     * adapter happens to carry it.
-     */
+    /** Required even when there is nothing to send. */
     public const JSON = ['Content-Type' => 'application/json'];
 
     /** @param array<string, mixed> $body */

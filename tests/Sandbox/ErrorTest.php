@@ -11,10 +11,6 @@ use Routegroup\IngPay\Lib\Config;
 use Routegroup\IngPay\Lib\Url;
 use RuntimeException;
 
-/**
- * The failing half of the client, which no unit test ever sees answered by the
- * gateway itself.
- */
 function sandboxWith(string $apiKey): Api
 {
     $sandbox = Sandbox::config();
@@ -49,8 +45,6 @@ it('reads the envelope the gateway wraps an error in', function (): void {
 })->skip(fn (): bool => ! Sandbox::isConfigured(), Sandbox::NO_CREDENTIALS);
 
 it('survives an error with no body at all', function (): void {
-    // A rejected key answers 401 and sends nothing, which is the shape most
-    // likely to break hydration.
     try {
         sandboxWith('not-a-key')->getServices();
     } catch (ApiErrorException $exception) {

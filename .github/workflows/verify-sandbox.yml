@@ -1,11 +1,6 @@
 # Verifies the package against the live ING Pay sandbox.
 #
-# Kept apart from run-tests.yml on purpose: different triggers, a longer run,
-# and the only workflow here that touches secrets.
-#
-# GitHub disables a schedule after roughly 60 days without commit activity in a
-# public repository. Once this package settles, this stops running on its own
-# and the absence of red will look like green.
+# GitHub disables a schedule after ~60 days without commits in a public repo.
 name: verify-sandbox
 
 on:
@@ -22,7 +17,7 @@ on:
     - cron: '17 3 * * *'
   workflow_dispatch:
 
-# The gateway notifies one configured address, so one tunnel, so one run.
+# One configured notification address, so one tunnel, so one run.
 concurrency:
   group: sandbox
   cancel-in-progress: true
@@ -35,8 +30,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
-    # The lowest version the package claims. Higher ones are covered by the
-    # unit matrix; this run is about the gateway, not about PHP.
     env:
       ING_PAY_ENV: sandbox
       ING_PAY_MERCHANT_ID: ${{ secrets.ING_PAY_MERCHANT_ID }}

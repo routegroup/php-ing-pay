@@ -6,13 +6,7 @@ namespace Routegroup\IngPay\Tests\Sandbox;
 
 use RuntimeException;
 
-/**
- * Reads what bin/sandbox-server.php caught.
- *
- * The gateway delivers to the one notification address configured on the
- * service, so a run holds the tunnel alone and everything that arrives while
- * it runs is its own.
- */
+/** Reads what bin/sandbox-server.php caught. */
 final class Notifications
 {
     public static function clear(): void

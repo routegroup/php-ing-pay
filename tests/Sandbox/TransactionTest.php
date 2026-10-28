@@ -15,10 +15,6 @@ use Routegroup\IngPay\Types\PaymentMethodCode;
 use Routegroup\IngPay\Types\TransactionType;
 use RuntimeException;
 
-/**
- * Nothing here is ever paid: these exercise what leaves this package and what
- * the gateway answers, which the read-only calls never touch.
- */
 it('creates a transaction and reads back what it sent', function (): void {
     $api = Sandbox::api();
     $orderId = Sandbox::orderId('CI-BLIK');
@@ -121,9 +117,8 @@ it('reaches capture and void well-formed, and is told the status is wrong', func
     try {
         $api->$method($created->id);
     } catch (ApiErrorException $exception) {
-        // 422 means the request was well formed and only the state was wrong.
-        // A 400 here would mean the content type went missing again, which is
-        // how both of these came to be broken without anyone noticing.
+        // 422 means well formed but wrong state; 400 would mean the content
+        // type went missing again.
         expect($exception->status())->toBe(422);
 
         return;
