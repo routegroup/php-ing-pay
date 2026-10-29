@@ -21,4 +21,9 @@ class TransactionResponseFactory extends ResponseFactory
             'action' => Action::factory(),
         ];
     }
+
+    public function withoutAction(): static
+    {
+        return $this->state(['action' => null]);
+    }
 }

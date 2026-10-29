@@ -16,8 +16,8 @@ enum TransactionStatus: string
 
     /**
      * The two below appear in no specification: chapter 04 lists the seven
-     * above, and `refund` is a transaction *type* there, not a status. Neither
-     * could be reached on the sandbox, which never settles a payment.
+     * above, and `refund` is a transaction *type* there, not a status. The
+     * sandbox reaches settled, rejected and cancelled, but neither of these.
      *
      * They stay because a status is a response value a caller never chooses.
      * Responses hydrate with tryFrom, so dropping a case the gateway does send

@@ -9,6 +9,9 @@ use Routegroup\IngPay\Http\Psr18Client;
 use Routegroup\IngPay\Lib\Config;
 use Routegroup\IngPay\Lib\Url;
 use Routegroup\IngPay\Types\Environment;
+use Routegroup\IngPay\Types\TransactionStatus;
+use Routegroup\IngPay\Value\Transaction;
+use RuntimeException;
 
 /** Credentials come from .env locally and from the environment in CI. */
 final class Sandbox
@@ -22,6 +25,14 @@ final class Sandbox
         'ING_PAY_SERVICE_ID',
         'ING_PAY_SERVICE_KEY',
         'ING_PAY_API_KEY',
+    ];
+
+    /** @var list<TransactionStatus> */
+    public const array OUTCOMES = [
+        TransactionStatus::SETTLED,
+        TransactionStatus::REJECTED,
+        TransactionStatus::CANCELLED,
+        TransactionStatus::ERROR,
     ];
 
     public static function value(string $key): ?string
@@ -103,5 +114,28 @@ final class Sandbox
     public static function orderId(string $prefix): string
     {
         return sprintf('%s-%s-%s', $prefix, self::value('GITHUB_RUN_ID') ?? 'local', bin2hex(random_bytes(3)));
+    }
+
+    /** Polls until the transaction reaches a status it will not leave. */
+    public static function awaitOutcome(Api $api, string $transactionId, int $seconds = 180): Transaction
+    {
+        $deadline = microtime(true) + $seconds;
+
+        do {
+            $transaction = $api->getTransaction($transactionId)->transaction;
+
+            if (in_array($transaction->status, self::OUTCOMES, true)) {
+                return $transaction;
+            }
+
+            sleep(3);
+        } while (microtime(true) < $deadline);
+
+        throw new RuntimeException(sprintf(
+            'Waited %ds for %s to leave %s.',
+            $seconds,
+            $transactionId,
+            $transaction->status->value ?? 'null',
+        ));
     }
 }

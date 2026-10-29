@@ -12,6 +12,7 @@ use Routegroup\IngPay\Exceptions\ApiErrorException;
 use Routegroup\IngPay\Types\Currency;
 use Routegroup\IngPay\Types\PaymentMethod;
 use Routegroup\IngPay\Types\PaymentMethodCode;
+use Routegroup\IngPay\Types\TransactionStatus;
 use Routegroup\IngPay\Types\TransactionType;
 use RuntimeException;
 
@@ -127,3 +128,56 @@ it('reaches capture and void well-formed, and is told the status is wrong', func
     throw new RuntimeException($method.' captured a transaction nobody authorised');
 })->with(['captureTransaction', 'voidTransaction'])
     ->skip(fn (): bool => ! Sandbox::isConfigured(), Sandbox::NO_CREDENTIALS);
+
+// A merchant that collects the blik code itself sends it along, and the
+// sandbox reads these three as instructions rather than as codes.
+it('reaches the outcome the sandbox blik code names', function (string $code, TransactionStatus $expected): void {
+    $api = Sandbox::api();
+
+    $response = $api->createTransaction(new CreateTransactionRequest([
+        'type' => TransactionType::SALE,
+        'amount' => 1000,
+        'currency' => Currency::PLN,
+        'orderId' => Sandbox::orderId('CI-BLIKCODE'),
+        'paymentMethod' => PaymentMethod::BLIK,
+        'paymentMethodCode' => PaymentMethodCode::BLIK,
+        'blikCode' => $code,
+        'successReturnUrl' => 'https://example.test/success',
+        'failureReturnUrl' => 'https://example.test/failure',
+        'customer' => ['firstName' => 'Anna', 'lastName' => 'Kowalska', 'email' => 'anna@example.test'],
+    ]));
+
+    // The payer is already where they need to be, so nothing comes back to
+    // redirect them to.
+    expect($response->action)->toBeNull()
+        ->and($response->transaction->status)->toBe(TransactionStatus::PENDING);
+
+    expect(Sandbox::awaitOutcome($api, $response->transaction->id)->status)->toBe($expected);
+})->with([
+    ['888000', TransactionStatus::SETTLED],
+    ['888111', TransactionStatus::REJECTED],
+])->skip(fn (): bool => ! Sandbox::isConfigured(), Sandbox::NO_CREDENTIALS);
+
+it('cancels a transaction that reached its validTo unpaid', function (): void {
+    $api = Sandbox::api();
+
+    $response = $api->createTransaction(new CreateTransactionRequest([
+        'type' => TransactionType::SALE,
+        'amount' => 1000,
+        'currency' => Currency::PLN,
+        'orderId' => Sandbox::orderId('CI-EXPIRY'),
+        'paymentMethod' => PaymentMethod::BLIK,
+        'paymentMethodCode' => PaymentMethodCode::BLIK,
+        'validTo' => time() + 60,
+        'successReturnUrl' => 'https://example.test/success',
+        'failureReturnUrl' => 'https://example.test/failure',
+        'customer' => ['firstName' => 'Anna', 'lastName' => 'Kowalska', 'email' => 'anna@example.test'],
+    ]));
+
+    // No code, so the payer is sent to the paywall and an action says where.
+    expect($response->action?->url)->not->toBeEmpty();
+
+    // Measured at roughly eighty seconds, a good while after validTo passes.
+    expect(Sandbox::awaitOutcome($api, $response->transaction->id, 240)->status)
+        ->toBe(TransactionStatus::CANCELLED);
+})->skip(fn (): bool => ! Sandbox::isConfigured(), Sandbox::NO_CREDENTIALS);
