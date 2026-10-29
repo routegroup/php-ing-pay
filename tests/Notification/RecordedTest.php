@@ -12,15 +12,16 @@ use Routegroup\IngPay\Lib\Validator;
 use Routegroup\IngPay\Notification\GenericNotification;
 use Routegroup\IngPay\Notification\RefundNotification;
 use Routegroup\IngPay\Payload;
+use Routegroup\IngPay\Tests\Sandbox\Fixture;
 use Routegroup\IngPay\Types\Environment;
 
 /** Re-signed under a key that exists only here; see the fixtures' README. */
 function recordedConfig(): Config
 {
     return new Config(
-        merchantId: 'fixturemerchant00001',
-        serviceId: '00000000-0000-4000-8000-000000000001',
-        serviceKey: 'fixture-service-key',
+        merchantId: Fixture::MERCHANT_ID,
+        serviceId: Fixture::SERVICE_ID,
+        serviceKey: Fixture::SERVICE_KEY,
         apiKey: 'unused',
         env: Environment::SANDBOX,
     );
@@ -91,6 +92,17 @@ it('accepts the signature the gateway sent', function (string $name): void {
         recordedValidator()->verifySignature($fixture['body'], $fixture['signature']);
     })->not->toThrow(InvalidSignatureException::class);
 })->with('recorded notifications');
+
+it('re-signs a body the way the scrubber does', function (string $name): void {
+    $fixture = recorded($name);
+
+    expect(Fixture::signature($fixture['body']))->toBe($fixture['signature']);
+})->with('recorded notifications');
+
+it('replaces the tunnel a notification was delivered to', function (): void {
+    expect(Fixture::scrub('{"notificationUrl":"http://tunnel.example/hook"}'))
+        ->toBe('{"notificationUrl":"'.Fixture::NOTIFICATION_URL.'"}');
+});
 
 it('passes the notification schema', function (string $name): void {
     $fixture = recorded($name);

@@ -8,4 +8,6 @@ under `fixture-service-key`** — it is not the one the gateway produced.
 Publishing a real body beside its real signature would hand out an offline
 oracle for the service key, since verification is `hash(body . serviceKey)`.
 
-The identity these verify against lives in `recordedConfig()`.
+`bin/sandbox-scrub.php` does the rewriting on the runner, so nothing the
+catcher wrote leaves it unscrubbed. The identity it writes, and that
+`recordedConfig()` verifies against, lives in `Tests\Sandbox\Fixture`.
