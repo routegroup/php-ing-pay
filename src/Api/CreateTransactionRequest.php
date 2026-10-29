@@ -76,6 +76,7 @@ class CreateTransactionRequest extends Payload implements Identified
 
     public readonly ?Wallet $wallet;
 
+    /** Must be at least sixty seconds out; the gateway answers 422 below that. */
     public readonly ?int $validTo;
 
     public readonly ?string $notificationUrl;
