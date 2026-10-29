@@ -17,3 +17,6 @@ node_modules
 node_modules/
 test-results/
 playwright-report/
+
+# Scrubbed copies of the caught notifications, for the run artifact.
+sandbox-notifications/
