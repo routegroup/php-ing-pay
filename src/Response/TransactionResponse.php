@@ -18,5 +18,6 @@ class TransactionResponse extends BaseResponse
 
     public readonly Transaction $transaction;
 
-    public readonly Action $action;
+    /** Only a call that sends the payer somewhere carries one; BLIK paid with a code does not. */
+    public readonly ?Action $action;
 }
