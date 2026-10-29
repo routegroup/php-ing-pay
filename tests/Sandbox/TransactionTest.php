@@ -168,7 +168,8 @@ it('cancels a transaction that reached its validTo unpaid', function (): void {
         'orderId' => Sandbox::orderId('CI-EXPIRY'),
         'paymentMethod' => PaymentMethod::BLIK,
         'paymentMethodCode' => PaymentMethodCode::BLIK,
-        'validTo' => time() + 60,
+        // Sixty seconds out is the gateway's floor, and landing on it is a coin flip.
+        'validTo' => time() + 90,
         'successReturnUrl' => 'https://example.test/success',
         'failureReturnUrl' => 'https://example.test/failure',
         'customer' => ['firstName' => 'Anna', 'lastName' => 'Kowalska', 'email' => 'anna@example.test'],
@@ -177,7 +178,7 @@ it('cancels a transaction that reached its validTo unpaid', function (): void {
     // No code, so the payer is sent to the paywall and an action says where.
     expect($response->action?->url)->not->toBeEmpty();
 
-    // Measured at roughly eighty seconds, a good while after validTo passes.
+    // The cancellation follows validTo within ten seconds or so.
     expect(Sandbox::awaitOutcome($api, $response->transaction->id, 240)->status)
         ->toBe(TransactionStatus::CANCELLED);
 })->skip(fn (): bool => ! Sandbox::isConfigured(), Sandbox::NO_CREDENTIALS);
