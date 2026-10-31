@@ -48,6 +48,10 @@ export default defineConfig({
         text: 'Prologue',
         items: [{ text: 'Introduction', link: '/introduction' }],
       },
+      {
+        text: 'Reference',
+        items: [{ text: 'Enums', link: '/reference/enums' }],
+      },
     ],
 
     outline: { level: [2, 3] },

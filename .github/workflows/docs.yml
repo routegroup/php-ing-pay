@@ -8,12 +8,14 @@ on:
       - main
     paths:
       - 'docs/**'
+      - 'src/Types/**'
       - 'tests/Docs/**'
       - 'tests/Fixtures/Notifications/**'
       - '.github/workflows/docs.yml'
   pull_request:
     paths:
       - 'docs/**'
+      - 'src/Types/**'
       - 'tests/Docs/**'
       - 'tests/Fixtures/Notifications/**'
       - '.github/workflows/docs.yml'
