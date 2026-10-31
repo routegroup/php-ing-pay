@@ -1,0 +1,46 @@
+{
+    "transaction": {
+        "id": "db57be6c-3ca8-4de3-b3f3-6e12bdfbbb1a",
+        "type": "sale",
+        "status": "settled",
+        "source": "api",
+        "created": 1793092880,
+        "modified": 1793092880,
+        "notificationUrl": "https://example.test/notify",
+        "serviceId": "00000000-0000-4000-8000-000000000001",
+        "amount": 500,
+        "currency": "PLN",
+        "title": "Obciazenie profilu",
+        "orderId": "PROFILE-84763023",
+        "paymentMethod": "card",
+        "paymentMethodCode": "oneclick",
+        "paymentProfile": {
+            "id": "2da19cca-3a30-48fe-abb1-a5df9ea88f01",
+            "merchantMid": "fixturemerchant00001",
+            "merchantCustomerId": "cid-2ac565ae",
+            "firstName": "test",
+            "lastName": "test",
+            "maskedNumber": "****1111",
+            "month": "12",
+            "year": "2029",
+            "organization": "VISA",
+            "isActive": 1,
+            "profile": "ONE_CLICK"
+        },
+        "statusCode": "CODE_000",
+        "statusCodeDescription": "CODE_000 - OK"
+    },
+    "payment": {
+        "id": "db57be6c-3ca8-4de3-b3f3-6e12bdfbbb1a",
+        "title": "Obciazenie profilu",
+        "amount": 500,
+        "status": "settled",
+        "created": 1793092880,
+        "orderId": "PROFILE-84763023",
+        "currency": "PLN",
+        "modified": 1793092880,
+        "serviceId": "00000000-0000-4000-8000-000000000001",
+        "ipksef": "",
+        "notificationUrl": "https://example.test/notify"
+    }
+}
