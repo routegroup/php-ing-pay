@@ -10,6 +10,7 @@ To start a transaction, pass a `CreateTransactionRequest` to `createTransaction`
 
 ::: code-group
 <<< @/../tests/Docs/samples/transactions/create.php#sample [PHP]
+<<< @/.laravel/tests/Docs/samples/transactions/create.php#sample [Laravel]
 :::
 
 Your merchant and service ID are added from your [configuration](/configuration) as the request is sent, so the request never carries them. The response holds the `transaction` that was opened, with its `id`. Store it next to your order: it is how you will recognise the transaction in every notification and every later call.
@@ -23,6 +24,7 @@ If your checkout collects the six-digit BLIK code itself, send it as `blikCode`:
 
 ::: code-group
 <<< @/../tests/Docs/samples/transactions/blik-code.php#sample [PHP]
+<<< @/.laravel/tests/Docs/samples/transactions/blik-code.php#sample [Laravel]
 :::
 
 The payer confirms the payment in their banking app, so there is nowhere to send them, and the response carries no action.
@@ -33,6 +35,7 @@ Most transactions answer with an `action`, which tells you what the payer has to
 
 ::: code-group
 <<< @/../tests/Docs/samples/transactions/action.php#sample [PHP]
+<<< @/.laravel/tests/Docs/samples/transactions/action.php#sample [Laravel]
 :::
 
 > [!WARNING]
@@ -44,11 +47,18 @@ To check where a transaction stands, ask for it by its ID:
 
 ::: code-group
 <<< @/../tests/Docs/samples/transactions/read.php#sample [PHP]
+<<< @/.laravel/tests/Docs/samples/transactions/read.php#sample [Laravel]
 :::
 
 A new transaction is `pending`. It ends as `settled` once the money is in, as `rejected` if the payer's bank refused it, or as `cancelled` if it expired unpaid. Every status is listed under [`TransactionStatus`](/reference/enums#TransactionStatus).
 
 Reading is the fallback, not the main road. Notifications tell you the moment a status changes, so poll only when one is overdue.
+
+## In Laravel
+
+The `Api` is bound in the container, built from `services.ing_pay`, and sends through Laravel's HTTP client. Resolve it with `app(Api::class)` or inject it into a controller. Nothing else in this guide changes: the requests, responses and statuses are the same classes.
+
+Because requests go through the HTTP client, `Http::fake()` intercepts them in your tests, and every factory carries your configured merchant and service while tests run.
 
 ## Testing
 
@@ -56,6 +66,7 @@ Your code depends on `Api`, so a test builds one over a `FakeClient`. The fake a
 
 ::: code-group
 <<< @/../tests/Docs/samples/transactions/testing.php#sample [PHP]
+<<< @/.laravel/tests/Docs/samples/transactions/testing.php#sample [Laravel]
 :::
 
 A fake that runs out of answers throws instead of inventing one, so a call you did not expect fails the test. [Testing](/testing) covers queued answers, factories and shared state in full.
