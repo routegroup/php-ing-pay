@@ -60,9 +60,7 @@ export default defineConfig({
 
   // Guides link to pages that are planned (#13) but not written yet. Each
   // entry goes when its page lands; any other dead link still fails the build.
-  ignoreDeadLinks: [
-    '/testing',
-  ],
+  ignoreDeadLinks: [],
 
   markdown: {
     config: (md) => md.use(rejectInlineSamples).use(requireSnippetRegions),
@@ -106,6 +104,21 @@ export default defineConfig({
           { text: 'Refunds', link: '/refunds' },
           { text: 'Capture & Void', link: '/capture-and-void' },
           { text: 'Payment Profiles', link: '/payment-profiles' },
+        ],
+      },
+      {
+        text: 'Your Account',
+        items: [
+          { text: 'Services & Payment Methods', link: '/services-and-payment-methods' },
+          { text: 'Trusted IPs', link: '/trusted-ips' },
+        ],
+      },
+      {
+        text: 'Digging Deeper',
+        items: [
+          { text: 'Error Handling', link: '/error-handling' },
+          { text: 'Payloads', link: '/payloads' },
+          { text: 'Testing', link: '/testing' },
         ],
       },
       {
