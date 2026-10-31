@@ -34,8 +34,6 @@ it('leaves the presentation fields out of the signature', function (): void {
 });
 
 it('would produce a different signature if they were included', function (): void {
-    // The point of the test above: without the exclusion the digest changes,
-    // and the gateway cannot reproduce it.
     $fields = queryOf(paywall()->url(widgetRequest()));
 
     $all = $fields;

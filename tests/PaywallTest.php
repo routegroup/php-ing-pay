@@ -92,8 +92,6 @@ it('renders the url from the same fields it signs', function (): void {
 });
 
 it('encodes the query as RFC 3986', function (): void {
-    // A space as %20, not +: the url Laravel's Arr::query() gave before the
-    // builder moved here, so a redirect built either way is the same.
     $url = paywall()->url(CreateTransactionRequest::factory()->make(['customerFirstName' => 'Anna Maria']));
 
     expect($url)->toContain('customerFirstName=Anna%20Maria')
