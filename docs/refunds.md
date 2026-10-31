@@ -24,7 +24,7 @@ To refund, pass a `RefundRequest` with the amount and a title to `createRefund`,
 <<< @/.laravel/tests/Docs/samples/refunds/refund.php#sample [Laravel]
 :::
 
-The request sets its type to `refund` itself, and your service ID is added from your configuration as it is sent. The response holds the refund's own `transaction`. Store its `id` next to the order, because that is the ID the refund's notifications carry.
+The request sets its type to `refund` itself, and your service ID is added from your [configuration](/configuration) as it is sent. The response holds the refund's own `transaction`. Store its `id` next to the order, because that is the ID the refund's notifications carry.
 
 > [!NOTE]
 > The amount is in the currency's smallest unit, like every amount: `2000` in `PLN` is 20.00 zł.
@@ -48,4 +48,4 @@ Answer the refund call with `RefundResponse::factory()`, then check what was sen
 <<< @/.laravel/tests/Docs/samples/refunds/testing.php#sample [Laravel]
 :::
 
-`CanRefundResponse::factory()` builds a refundable answer, with a partial-refund range up to the full amount.
+`CanRefundResponse::factory()` builds a refundable answer, with a partial-refund range up to the full amount. [Testing](/testing) covers the fake client in full.

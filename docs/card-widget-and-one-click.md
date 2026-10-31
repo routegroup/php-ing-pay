@@ -36,7 +36,7 @@ Each card is a `PaymentProfile`. Its `maskedNumber`, `organization` and expiry a
 <<< @/.laravel/tests/Docs/samples/card-widget-and-one-click/charge.php#sample [Laravel]
 :::
 
-There is no redirect and no form: the response carries the `transaction` the charge created, with its status.
+There is no redirect and no form: the response carries the `transaction` the charge created, with its status. Fulfil the order when its [notification](/notifications) says it is `settled`. [Payment Profiles](/payment-profiles) covers saved cards in full, including deactivating one.
 
 ## In Laravel
 
@@ -51,4 +51,4 @@ The widget makes no call from your server, so test the fields it gets. Because t
 <<< @/.laravel/tests/Docs/samples/card-widget-and-one-click/testing.php#sample [Laravel]
 :::
 
-The one-click calls go through `Api`, so they are tested like any other call: `ProfilesResponse::factory()` and `ChargeProfileResponse::factory()` give the fake its answers.
+The one-click calls go through `Api`, so they are tested like any other call: `ProfilesResponse::factory()` and `ChargeProfileResponse::factory()` give the fake its answers. [Testing](/testing) covers the fake client in full.

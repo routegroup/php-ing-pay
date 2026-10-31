@@ -20,7 +20,7 @@ Wrap the call and catch `ApiErrorException`:
 
 ## Reading Refusals Without Exceptions
 
-By default every answer outside 2xx throws. Turn `strictErrors` off in your configuration and only 422 and 500 still throw; any other refusal comes back as a response you can ask:
+By default every answer outside 2xx throws. Turn `strictErrors` off in your [configuration](/configuration#optional-settings) and only 422 and 500 still throw; any other refusal comes back as a response you can ask:
 
 ::: code-group
 <<< @/../tests/Docs/samples/error-handling/lenient.php#sample [PHP]
@@ -40,15 +40,15 @@ Every exception is in `Routegroup\IngPay\Exceptions`, apart from the Laravel pac
 | --- | --- | --- |
 | `ApiErrorException` | `Exception` | ING Pay answered a call outside 2xx: any such status with `strictErrors` on, only 422 and 500 with it off. Carries `status()`, `error`, `request` and `context()`. |
 | `MissingFieldException` | `UnexpectedValueException` | A payload is built without a field its type requires, from your array or from ING Pay's answer. Names the `payload`, `field` and `expected` type. |
-| `InvalidCartException` | `InvalidArgumentException` | A `Cart` breaks a rule: no items, an item without a required field, a quantity below 1, a tax rate Lease Now does not take, or an invalid URL. Names the `field`. |
-| `InvalidInvoiceException` | `InvalidArgumentException` | An `Invoice`, its buyer, positions or VAT exemption miss a required field or carry a tax rate the gateway does not take. Names the `field`. |
-| `InvalidInstallmentException` | `InvalidArgumentException` | An `Installment` period is missing, not a whole number, or outside what ING Pay offers. Carries the `period`. |
+| `InvalidCartException` | `InvalidArgumentException` | A [`Cart`](/carts-and-invoices#sending-a-cart) breaks a rule: no items, an item without a required field, a quantity below 1, a tax rate Lease Now does not take, or an invalid URL. Names the `field`. |
+| `InvalidInvoiceException` | `InvalidArgumentException` | An [`Invoice`](/carts-and-invoices#sending-an-invoice), its buyer, positions or VAT exemption miss a required field or carry a tax rate the gateway does not take. Names the `field`. |
+| `InvalidInstallmentException` | `InvalidArgumentException` | An [`Installment`](/installments#checking-the-period) period is missing, not a whole number, or outside what ING Pay offers. Carries the `period`. |
 | `InvalidMultipayoutException` | `InvalidArgumentException` | A multipayout recipient misses a field, has an amount below 1, or a value too long or with characters the gateway rejects. Names the `index` and `field`. |
 | `InvalidWalletException` | `InvalidArgumentException` | A wallet payment, its Apple Pay data or the browser data misses a required field. Names the full `field` path. |
-| `InvalidSignatureException` | `Exception` | A notification's signature is missing, does not verify, or was issued for another merchant or service. |
-| `SchemaValidationException` | `Exception` | A notification's body does not have the shape ING Pay documents. Lists the failures in `errors`. |
-| `MissingFakerException` | `RuntimeException` | A factory runs without `fakerphp/faker` installed. Add it to your `require-dev`. |
-| `MissingGuzzleException` | `RuntimeException` | `Psr18Client::guzzle()` runs without `guzzlehttp/guzzle` installed. |
+| `InvalidSignatureException` | `Exception` | A [notification](/notifications#receiving-a-notification)'s signature is missing, does not verify, or was issued for another merchant or service. |
+| `SchemaValidationException` | `Exception` | A [notification](/notifications#reading-a-notification)'s body does not have the shape ING Pay documents. Lists the failures in `errors`. |
+| `MissingFakerException` | `RuntimeException` | A factory runs without `fakerphp/faker` installed. Add it to your `require-dev`, as [Installation](/installation#testing) shows. |
+| `MissingGuzzleException` | `RuntimeException` | `Psr18Client::guzzle()` runs without `guzzlehttp/guzzle` installed. [Installation](/installation#adding-an-http-client) adds it. |
 | `InvalidEnvironmentException` (Laravel) | `InvalidArgumentException` | `services.ing_pay.env` is neither `production` nor `sandbox`. Carries the `given` value. |
 
 The `Invalid…` exceptions are thrown while you build the value, so a bad cart fails in your code, not at the gateway. Catch `InvalidArgumentException` to handle all of them at once.

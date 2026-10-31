@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Your tests should never reach ING Pay. The `Api` sends through a client you hand it, and the package ships `FakeClient`, which answers with what you give it and keeps every request it was sent. In Laravel, the `Api` sends through Laravel's HTTP client, so `Http::fake()` and `Http::assertSent()` work as they do for any other call. Factories, covered under [Payloads](/payloads#building-payloads-with-factories), build the answers.
+Your tests should never reach ING Pay. The `Api` sends through a client you hand it, and the package ships `FakeClient`, which answers with what you give it and keeps every request it was sent. In Laravel, the `Api` sends through Laravel's HTTP client, so `Http::fake()` and `Http::assertSent()` work as they do for any other call. Factories, covered under [Payloads](/payloads#building-payloads-with-factories), build the answers; they need `fakerphp/faker`, which [Installation](/installation#testing) adds.
 
 ## Faking the Gateway
 

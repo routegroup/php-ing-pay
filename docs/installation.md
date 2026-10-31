@@ -62,4 +62,4 @@ composer show fakerphp/faker
 ```
 :::
 
-Calling a factory without Faker installed throws a `MissingFakerException` that names the package to add.
+Calling a factory without Faker installed throws a `MissingFakerException` that names the package to add. [Payloads](/payloads#building-payloads-with-factories) shows the factories, and [Testing](/testing) how they answer a fake client.

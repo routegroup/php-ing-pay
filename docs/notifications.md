@@ -2,7 +2,7 @@
 
 ## Introduction
 
-ING Pay tells your server when something happens to a transaction. It sends a `POST` with a JSON body to your notification address, signed with your service key. This is how you learn that a [transaction](/transactions) settled, that a [refund](/refunds) went through, or that a [saved card](/payment-profiles) was charged. This guide covers checking that a notification is genuine, reading it, and the one kind that works differently: report notifications.
+ING Pay tells your server when something happens to a transaction. It sends a `POST` with a JSON body to your notification address, signed with your [service key](/configuration#your-credentials). This is how you learn that a [transaction](/transactions) settled, that a [refund](/refunds) went through, or that a [saved card](/payment-profiles) was charged. This guide covers checking that a notification is genuine, reading it, and the one kind that works differently: report notifications.
 
 ## Receiving a Notification
 
@@ -34,7 +34,7 @@ Once the signature holds, decode the body, check it against the notification sch
 <<< @/.laravel/tests/Docs/samples/notifications/handle.php#sample [Laravel]
 :::
 
-`fromNotification` throws a `SchemaValidationException` when the body is not a notification, for example a `transaction` without its `id`, `amount` or `status`. A `GenericNotification` holds the `transaction`, its `payment`, and the `action` or `paymentProfile` when the gateway sent one. In a `RefundNotification`, `transaction` is the refund itself, of type `refund`, while `originalTransactionId` and `payment` describe the transaction it gave money back from.
+`fromNotification` throws a `SchemaValidationException` when the body is not a notification, for example a `transaction` without its `id`, `amount` or `status`. [Error Handling](/error-handling#exceptions) lists it with `InvalidSignatureException` and the rest. A `GenericNotification` holds the `transaction`, its `payment`, and the `action` or `paymentProfile` when the gateway sent one. In a `RefundNotification`, `transaction` is the refund itself, of type `refund`, while `originalTransactionId` and `payment` describe the transaction it gave money back from.
 
 Act on `transaction.status`, using the same statuses as when you [read a transaction](/transactions#reading-a-transaction). Fulfil an order when its transaction is `settled`, and find the order through `orderId`, which is the identifier you sent when you created the transaction.
 
@@ -65,4 +65,4 @@ ING Pay posts from outside your application, without a CSRF token. Put the notif
 <<< @/.laravel/tests/Docs/samples/notifications/testing.php#sample [Laravel]
 :::
 
-Every notification class has a factory: `GenericNotification::factory()` builds a settled sale (`asPending()` makes it pending), `RefundNotification::factory()` a settled refund, and `ReportNotification::factory()` a generated report.
+Every notification class has a factory: `GenericNotification::factory()` builds a settled sale (`asPending()` makes it pending), `RefundNotification::factory()` a settled refund, and `ReportNotification::factory()` a generated report. [Testing](/testing) covers factories and the fake client in full.

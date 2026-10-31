@@ -43,7 +43,7 @@ Every payload has a factory that builds a valid one with random values, for your
 `make()` builds one payload, and the array you pass it wins over everything else. `state()` sets values for every payload the factory builds, and takes a closure when a value depends on the ones generated. `makeMany()` builds several, as many as `count()` says when you give no number, and `sequence()` cycles its states across them. A response's factory also takes `status()`, to build a response ING Pay refused.
 
 > [!WARNING]
-> Factories need `fakerphp/faker`, which the package does not require at runtime. Add it to your `require-dev`, or a factory throws `MissingFakerException`.
+> Factories need `fakerphp/faker`, which the package does not require at runtime. Add it to your `require-dev`, as [Installation](/installation#testing) shows, or a factory throws `MissingFakerException`.
 
 ## In Laravel
 

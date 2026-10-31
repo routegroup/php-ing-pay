@@ -58,10 +58,6 @@ export default defineConfig({
   cleanUrls: true,
   sitemap: { hostname: 'https://php-ing-pay.routegroup.pl' },
 
-  // Guides link to pages that are planned (#13) but not written yet. Each
-  // entry goes when its page lands; any other dead link still fails the build.
-  ignoreDeadLinks: [],
-
   markdown: {
     config: (md) => md.use(rejectInlineSamples).use(requireSnippetRegions),
   },
@@ -69,7 +65,7 @@ export default defineConfig({
   themeConfig: {
     search: { provider: 'local' },
 
-    // One hand-ordered journey (#13). Groups appear as their pages land:
+    // One hand-ordered journey (#13):
     // Prologue → Getting Started → Taking Payments → After the Payment →
     // Your Account → Digging Deeper → Reference.
     sidebar: [
@@ -123,7 +119,10 @@ export default defineConfig({
       },
       {
         text: 'Reference',
-        items: [{ text: 'Enums', link: '/reference/enums' }],
+        items: [
+          { text: 'API Calls', link: '/reference/api-calls' },
+          { text: 'Enums', link: '/reference/enums' },
+        ],
       },
     ],
 

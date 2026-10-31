@@ -48,7 +48,7 @@ A `Cart` or `Invoice` checks itself as it is built, so a missing field fails in 
 <<< @/.laravel/tests/Docs/samples/carts-and-invoices/invalid.php#sample [Laravel]
 :::
 
-A cart throws `InvalidCartException` and an invoice `InvalidInvoiceException`. Both carry the offending `field` and say what is wrong with it in the message.
+A cart throws `InvalidCartException` and an invoice `InvalidInvoiceException`. Both carry the offending `field` and say what is wrong with it in the message, and [Error Handling](/error-handling#exceptions) lists them with the others.
 
 ## In Laravel
 
@@ -56,7 +56,7 @@ Nothing changes: `Cart` and `Invoice` are plain value objects, attached to reque
 
 ## Testing
 
-`Cart::factory()` and `Invoice::factory()` build valid values, so a test attaches one and checks it was sent:
+`Cart::factory()` and `Invoice::factory()` build valid values, so a test attaches one and checks it was sent. [Testing](/testing) covers the fake client in full:
 
 ::: code-group
 <<< @/../tests/Docs/samples/carts-and-invoices/testing.php#sample [PHP]
