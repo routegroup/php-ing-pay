@@ -40,9 +40,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
-      # The [Laravel] tabs import their samples from laravel-ing-pay, which
-      # is public, so this needs no token. `main` matches the dev-main
-      # dependency and the site's single latest version.
       - name: Checkout laravel-ing-pay
         uses: actions/checkout@v7
         with:

@@ -1,7 +1,4 @@
-// The [Laravel] tabs import their samples from a laravel-ing-pay checkout at
-// docs/.laravel/. CI checks it out there; locally it is a symlink to the
-// sibling clone. Without it VitePress fails on the first import with a bare
-// ENOENT, so say what is missing and how to fix it before it gets that far.
+// VitePress would fail on the first [Laravel] import with a bare ENOENT.
 import { existsSync } from 'node:fs'
 
 if (!existsSync(new URL('../.laravel/composer.json', import.meta.url))) {
