@@ -64,8 +64,6 @@ export default defineConfig({
     '/choosing-an-integration',
     '/configuration',
     '/notifications',
-    '/payment-links',
-    '/paywall',
     '/testing',
   ],
 
@@ -86,7 +84,14 @@ export default defineConfig({
       },
       {
         text: 'Taking Payments',
-        items: [{ text: 'Transactions', link: '/transactions' }],
+        items: [
+          { text: 'Transactions', link: '/transactions' },
+          { text: 'Paywall', link: '/paywall' },
+          { text: 'Payment Links', link: '/payment-links' },
+          { text: 'Card Widget & One-Click', link: '/card-widget-and-one-click' },
+          { text: 'Installments', link: '/installments' },
+          { text: 'Carts & Invoices', link: '/carts-and-invoices' },
+        ],
       },
       {
         text: 'Reference',
