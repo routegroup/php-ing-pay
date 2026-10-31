@@ -40,6 +40,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Checkout laravel-ing-pay
+        uses: actions/checkout@v7
+        with:
+          repository: routegroup/laravel-ing-pay
+          ref: main
+          path: docs/.laravel
+          persist-credentials: false
+
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
