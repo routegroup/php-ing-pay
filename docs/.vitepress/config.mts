@@ -66,7 +66,6 @@ export default defineConfig({
     '/notifications',
     '/payment-links',
     '/paywall',
-    '/reference/enums',
     '/testing',
   ],
 
@@ -88,6 +87,10 @@ export default defineConfig({
       {
         text: 'Taking Payments',
         items: [{ text: 'Transactions', link: '/transactions' }],
+      },
+      {
+        text: 'Reference',
+        items: [{ text: 'Enums', link: '/reference/enums' }],
       },
     ],
 

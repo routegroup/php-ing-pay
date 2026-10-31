@@ -46,7 +46,7 @@ To check where a transaction stands, ask for it by its ID:
 <<< @/../tests/Docs/samples/transactions/read.php#sample [PHP]
 :::
 
-A new transaction is `pending`. It ends as `settled` once the money is in, as `rejected` if the payer's bank refused it, or as `cancelled` if it expired unpaid. Every status is listed under [`TransactionStatus`](/reference/enums#transactionstatus).
+A new transaction is `pending`. It ends as `settled` once the money is in, as `rejected` if the payer's bank refused it, or as `cancelled` if it expired unpaid. Every status is listed under [`TransactionStatus`](/reference/enums#TransactionStatus).
 
 Reading is the fallback, not the main road. Notifications tell you the moment a status changes, so poll only when one is overdue.
 
