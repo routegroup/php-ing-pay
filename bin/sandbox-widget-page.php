@@ -10,10 +10,10 @@ declare(strict_types=1);
 require __DIR__.'/../vendor/autoload.php';
 
 use Routegroup\IngPay\Lib\Utils;
+use Routegroup\IngPay\Paywall;
 use Routegroup\IngPay\Paywall\OneClickRequest;
 use Routegroup\IngPay\Tests\Sandbox\Sandbox;
 use Routegroup\IngPay\Types\Currency;
-use Routegroup\IngPay\Types\HashMethod;
 use Routegroup\IngPay\Types\WidgetType;
 
 $missing = Sandbox::missing();
@@ -43,13 +43,9 @@ $request = new OneClickRequest([
     'urlReturn' => $base.'/done?r=return',
     'locale' => 'pl',
     'inline' => true,
-])->withIdentity($config);
+]);
 
-$fields = $request->toArray();
-unset($fields['signature']);
-
-$signed = array_diff_key($fields, array_flip($request->unsignedFields()));
-$fields['signature'] = new Utils($config)->createSignature($signed, HashMethod::SHA256);
+$fields = new Paywall($config, new Utils($config))->fields($request);
 
 $attributes = [];
 
