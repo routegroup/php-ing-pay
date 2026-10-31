@@ -9,10 +9,13 @@ on:
       - main
     paths:
       - '**.php'
-      - '**.js'
+      - 'tests/Browser/**'
+      - 'playwright.config.js'
+      - 'bin/**'
       - '.github/workflows/verify-sandbox.yml'
       - 'composer.json'
-      - 'package.json'
+      - 'package*.json'
+      - '.nvmrc'
   schedule:
     - cron: '17 3 * * *'
   workflow_dispatch:
@@ -69,7 +72,7 @@ jobs:
         if: steps.guard.outputs.ok == 'true'
         uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version-file: '.nvmrc'
 
       - name: Setup Ruby
         if: steps.guard.outputs.ok == 'true'
