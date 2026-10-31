@@ -60,9 +60,7 @@ export default defineConfig({
 
   // Guides link to pages that are planned (#13) but not written yet. Each
   // entry goes when its page lands; any other dead link still fails the build.
-  ignoreDeadLinks: [
-    '/notifications',
-  ],
+  ignoreDeadLinks: [],
 
   markdown: {
     config: (md) => md.use(rejectInlineSamples).use(requireSnippetRegions),
@@ -97,6 +95,15 @@ export default defineConfig({
           { text: 'Card Widget & One-Click', link: '/card-widget-and-one-click' },
           { text: 'Installments', link: '/installments' },
           { text: 'Carts & Invoices', link: '/carts-and-invoices' },
+        ],
+      },
+      {
+        text: 'After the Payment',
+        items: [
+          { text: 'Notifications', link: '/notifications' },
+          { text: 'Refunds', link: '/refunds' },
+          { text: 'Capture & Void', link: '/capture-and-void' },
+          { text: 'Payment Profiles', link: '/payment-profiles' },
         ],
       },
       {

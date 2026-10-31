@@ -11,3 +11,6 @@ oracle for the service key, since verification is `hash(body . serviceKey)`.
 `bin/sandbox-scrub.php` does the rewriting on the runner, so nothing the
 catcher wrote leaves it unscrubbed. The identity it writes, and that
 `recordedConfig()` verifies against, lives in `Tests\Sandbox\Fixture`.
+
+`bodies/` holds a few of these bodies decoded and pretty-printed, for the docs
+site to show. `tests/Docs/NotificationsTest.php` checks they still match.
