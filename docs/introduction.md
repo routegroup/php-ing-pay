@@ -12,22 +12,16 @@ The gateway is covered by two packages, and you install exactly one of them.
 
 [`routegroup/laravel-ing-pay`](https://github.com/routegroup/laravel-ing-pay) is the Laravel layer on top of it. It builds the client from your `services.ing_pay` configuration, sends through Laravel's HTTP client, and adds a request validator for notifications. Everything else, from requests to responses to enums, is the core package's classes.
 
-To install the one that fits your application:
+[Installation](/installation) shows how to add the one that fits your application, and what each needs next to it.
 
-::: code-group
-```sh [PHP]
-composer require routegroup/php-ing-pay
-```
+## Where to Start
 
-```sh [Laravel]
-composer require routegroup/laravel-ing-pay
-```
-:::
+Read the Getting Started guides in order: they set up what every other guide assumes.
 
-Both need PHP 8.4 or newer. The Laravel package needs Laravel 13.
-
-> [!WARNING]
-> Neither package is tagged on Packagist yet, so these commands do not resolve today. The guides describe the code on `main`, which is what the first release will ship.
+1. [Installation](/installation) adds the package, and an HTTP client to send with.
+2. [Configuration](/configuration) gives it your credentials and picks the sandbox or production.
+3. [Sending Requests](/sending-requests) builds the `Api` every guide calls, and shows how a refused call and a test look.
+4. [Choosing an Integration](/choosing-an-integration) compares the four ways to take a payment, so you know which guide to read next.
 
 ## Reading the Guides
 
