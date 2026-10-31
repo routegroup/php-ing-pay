@@ -8,9 +8,9 @@ ING Pay, formerly imoje, is ING's payment gateway: it takes card, BLIK, pay-by-l
 
 The gateway is covered by two packages, and you install exactly one of them.
 
-[`routegroup/php-ing-pay`](https://github.com/routegroup/php-ing-pay) is the client itself, in plain PHP with no framework behind it. It describes every request, reads every response into a typed object, and verifies the notifications ING Pay sends you. It sends nothing by itself: you give it a client, or wrap the PSR-18 client you already have.
+[`routegroup/php-ing-pay`](https://github.com/routegroup/php-ing-pay) is the client itself, in plain PHP with no framework behind it. It describes every request, reads every response into a typed object, signs the paywall form the payer's browser submits, and verifies the notifications ING Pay sends you. It sends nothing by itself: you give it a client, or wrap the PSR-18 client you already have.
 
-[`routegroup/laravel-ing-pay`](https://github.com/routegroup/laravel-ing-pay) is the Laravel layer on top of it. It builds the client from your `services.ing_pay` configuration, sends through Laravel's HTTP client, and adds the paywall URL builder and a request validator for notifications. Everything else, from requests to responses to enums, is the core package's classes.
+[`routegroup/laravel-ing-pay`](https://github.com/routegroup/laravel-ing-pay) is the Laravel layer on top of it. It builds the client from your `services.ing_pay` configuration, sends through Laravel's HTTP client, and adds a request validator for notifications. Everything else, from requests to responses to enums, is the core package's classes.
 
 To install the one that fits your application:
 
