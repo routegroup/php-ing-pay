@@ -63,7 +63,6 @@ export default defineConfig({
   ignoreDeadLinks: [
     '/choosing-an-integration',
     '/configuration',
-    '/notifications',
     '/payment-links',
     '/paywall',
     '/testing',
@@ -87,6 +86,15 @@ export default defineConfig({
       {
         text: 'Taking Payments',
         items: [{ text: 'Transactions', link: '/transactions' }],
+      },
+      {
+        text: 'After the Payment',
+        items: [
+          { text: 'Notifications', link: '/notifications' },
+          { text: 'Refunds', link: '/refunds' },
+          { text: 'Capture & Void', link: '/capture-and-void' },
+          { text: 'Payment Profiles', link: '/payment-profiles' },
+        ],
       },
       {
         text: 'Reference',
