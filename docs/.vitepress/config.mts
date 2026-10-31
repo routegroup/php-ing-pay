@@ -61,11 +61,7 @@ export default defineConfig({
   // Guides link to pages that are planned (#13) but not written yet. Each
   // entry goes when its page lands; any other dead link still fails the build.
   ignoreDeadLinks: [
-    '/choosing-an-integration',
-    '/configuration',
     '/notifications',
-    '/payment-links',
-    '/paywall',
   ],
 
   markdown: {
@@ -84,8 +80,24 @@ export default defineConfig({
         items: [{ text: 'Introduction', link: '/introduction' }],
       },
       {
+        text: 'Getting Started',
+        items: [
+          { text: 'Installation', link: '/installation' },
+          { text: 'Configuration', link: '/configuration' },
+          { text: 'Sending Requests', link: '/sending-requests' },
+          { text: 'Choosing an Integration', link: '/choosing-an-integration' },
+        ],
+      },
+      {
         text: 'Taking Payments',
-        items: [{ text: 'Transactions', link: '/transactions' }],
+        items: [
+          { text: 'Transactions', link: '/transactions' },
+          { text: 'Paywall', link: '/paywall' },
+          { text: 'Payment Links', link: '/payment-links' },
+          { text: 'Card Widget & One-Click', link: '/card-widget-and-one-click' },
+          { text: 'Installments', link: '/installments' },
+          { text: 'Carts & Invoices', link: '/carts-and-invoices' },
+        ],
       },
       {
         text: 'Your Account',
