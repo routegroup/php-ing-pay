@@ -5,7 +5,6 @@ import { defineLoader } from 'vitepress'
 export interface EnumCase {
   name: string
   value: string | number | null
-  // The `//` comment trailing the case, if any.
   note: string | null
 }
 
@@ -19,9 +18,6 @@ export interface EnumType {
 declare const data: EnumType[]
 export { data }
 
-// Every enum in src/Types, read as text so the docs build needs Node only.
-// The grammar used there is small and regular; anything outside it throws
-// rather than drops a case from the page silently.
 export default defineLoader({
   watch: ['../../src/Types/*.php'],
   load(files) {

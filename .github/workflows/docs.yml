@@ -8,7 +8,6 @@ on:
       - main
     paths:
       - 'docs/**'
-      # The Enums reference is read from here at build time.
       - 'src/Types/**'
       - 'tests/Docs/**'
       - 'tests/Fixtures/Notifications/**'
@@ -16,7 +15,6 @@ on:
   pull_request:
     paths:
       - 'docs/**'
-      # The Enums reference is read from here at build time.
       - 'src/Types/**'
       - 'tests/Docs/**'
       - 'tests/Fixtures/Notifications/**'
