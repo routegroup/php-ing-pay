@@ -66,7 +66,6 @@ export default defineConfig({
     '/notifications',
     '/payment-links',
     '/paywall',
-    '/testing',
   ],
 
   markdown: {
@@ -87,6 +86,21 @@ export default defineConfig({
       {
         text: 'Taking Payments',
         items: [{ text: 'Transactions', link: '/transactions' }],
+      },
+      {
+        text: 'Your Account',
+        items: [
+          { text: 'Services & Payment Methods', link: '/services-and-payment-methods' },
+          { text: 'Trusted IPs', link: '/trusted-ips' },
+        ],
+      },
+      {
+        text: 'Digging Deeper',
+        items: [
+          { text: 'Error Handling', link: '/error-handling' },
+          { text: 'Payloads', link: '/payloads' },
+          { text: 'Testing', link: '/testing' },
+        ],
       },
       {
         text: 'Reference',
