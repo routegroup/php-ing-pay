@@ -68,7 +68,7 @@
             "pestphp/pest-plugin": true
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "suggest": {
         "fakerphp/faker": "Required by the test factories (Payload::factory()); this package does not need it at runtime.",

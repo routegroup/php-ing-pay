@@ -13,9 +13,6 @@ PHP 8.4 or newer. Add the package, and Guzzle to send its requests:
 composer require routegroup/php-ing-pay guzzlehttp/guzzle
 ```
 
-The package is not tagged on Packagist yet, so this resolves once the first
-release is out.
-
 ## Usage
 
 ```php
