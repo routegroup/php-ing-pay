@@ -2,7 +2,7 @@
 
 ## Introduction
 
-A payment profile is a card that a payer saved with ING Pay for one-click payments. ING Pay keeps the card. You keep the profile's ID and the customer ID the card was saved under, and you can charge the card later without the payer entering it again. Cards are saved through the card widget, under the `customerId` you give it.
+A payment profile is a card that a payer saved with ING Pay for one-click payments. ING Pay keeps the card. You keep the profile's ID and the customer ID the card was saved under, and you can charge the card later without the payer entering it again. Cards are saved through the [card widget](/card-widget-and-one-click#showing-the-widget), under the `customerId` you give it.
 
 ## Listing a Customer's Cards
 

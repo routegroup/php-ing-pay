@@ -51,7 +51,7 @@ An `Installment` refuses a period below 3 or above 36 months as it is built. Eac
 <<< @/.laravel/tests/Docs/samples/installments/period.php#sample [Laravel]
 :::
 
-Both checks throw `InvalidInstallmentException`, whose message names the rule that was broken.
+Both checks throw [`InvalidInstallmentException`](/error-handling#exceptions), whose message names the rule that was broken.
 
 ## In Laravel
 
@@ -66,4 +66,4 @@ Creating the transaction is an ordinary `Api` call, so a test answers it with a 
 <<< @/.laravel/tests/Docs/samples/installments/testing.php#sample [Laravel]
 :::
 
-`InstallmentsCalculatorRequest::factory()` builds a calculator request with an amount inside the allowed range.
+`InstallmentsCalculatorRequest::factory()` builds a calculator request with an amount inside the allowed range. [Testing](/testing) covers the fake client in full.

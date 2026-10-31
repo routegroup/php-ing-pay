@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The paywall is ING Pay's own payment page. You send the payer there with the amount and the order, and they pick a method, pay, and come back to you. Nothing is sent from your server: you build a signed set of fields and the payer's browser carries them to ING Pay, either in a link or in a form. If you want to choose the method on your own checkout instead, start a [transaction](/transactions); if the payer should pay later, from an email or a chat, send a [payment link](/payment-links).
+The paywall is ING Pay's own payment page. You send the payer there with the amount and the order, and they pick a method, pay, and come back to you. Nothing is sent from your server: you build a signed set of fields and the payer's browser carries them to ING Pay, either in a link or in a form. If you want to choose the method on your own checkout instead, start a [transaction](/transactions); if the payer should pay later, from an email or a chat, send a [payment link](/payment-links). [Choosing an Integration](/choosing-an-integration) compares them.
 
 ## Sending the Payer to the Paywall
 
@@ -39,7 +39,7 @@ If you would rather have the payer submit a form than follow a link, `fields` re
 The signature covers every field in the array. Render them as they are: a field you change or leave out makes the gateway refuse the payment.
 
 > [!WARNING]
-> A payer arriving at your `urlSuccess` has not proved anything: the address can be opened by hand. Fulfil the order when ING Pay's signed notification says the transaction is `settled`.
+> A payer arriving at your `urlSuccess` has not proved anything: the address can be opened by hand. Fulfil the order when ING Pay's signed [notification](/notifications) says the transaction is `settled`.
 
 ## In Laravel
 
@@ -54,4 +54,4 @@ The paywall makes no call of its own, so there is nothing to fake. Build the URL
 <<< @/.laravel/tests/Docs/samples/paywall/testing.php#sample [Laravel]
 :::
 
-`CreateTransactionRequest::factory()` fills every required field, so a test sets only the ones it is about.
+`CreateTransactionRequest::factory()` fills every required field, so a test sets only the ones it is about. [Testing](/testing) covers factories in full.

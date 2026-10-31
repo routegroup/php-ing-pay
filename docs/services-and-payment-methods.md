@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Your ING Pay merchant account holds one or more services, usually one per shop, and each service has its own set of payment methods switched on. The API can tell you which services you have, which methods a service accepts, and which of them a payer can use for a given amount right now. That last answer is what a method picker on your checkout is built from, before you start a [transaction](/transactions).
+Your ING Pay merchant account holds one or more services, usually one per shop, and each service has its own set of payment methods switched on. The API can tell you which services you have, which methods a service accepts, and which of them a payer can use for a given amount right now. That last answer is what a method picker on your checkout is built from, before you start a [transaction](/transactions). [Choosing an Integration](/choosing-an-integration) explains when you need one.
 
 ## Listing Your Services
 
@@ -13,7 +13,7 @@ To see every service on your merchant account, call `getServices`:
 <<< @/.laravel/tests/Docs/samples/services-and-payment-methods/services.php#sample [Laravel]
 :::
 
-Each entry is a `ServiceData` with its `id`, its `created` timestamp, whether it `isActive`, and its `paymentMethods`. The `id` is the service ID your configuration names; the requests you send are filled in with it on their way out.
+Each entry is a `ServiceData` with its `id`, its `created` timestamp, whether it `isActive`, and its `paymentMethods`. The `id` is the service ID your [configuration](/configuration#your-credentials) names; the requests you send are filled in with it on their way out.
 
 ## Reading a Service
 

@@ -43,7 +43,7 @@ A refused call throws an `ApiErrorException`. Its `status()` is the HTTP status,
 <<< @/.laravel/tests/Docs/samples/sending-requests/errors.php#sample [Laravel]
 :::
 
-The exception's message is ING Pay's own, when it gave one. Its `error` holds the rest of ING Pay's answer, with a `code` and a list of `errors`, each naming the field that was wrong; its `request` holds what you sent. `context()` returns all three as an array, ready for your log.
+The exception's message is ING Pay's own, when it gave one. Its `error` holds the rest of ING Pay's answer, with a `code` and a list of `errors`, each naming the field that was wrong; its `request` holds what you sent. `context()` returns all three as an array, ready for your log. [Error Handling](/error-handling) lists every exception the package throws.
 
 With [strict errors](/configuration#optional-settings) turned off, only a 422 or a 500 throws. Any other refusal comes back as a response, and its `failed()` and `error()` tell you what happened.
 
@@ -62,6 +62,6 @@ Your code depends on the `Api`, not on the network, so a test builds the `Api` o
 <<< @/.laravel/tests/Docs/samples/sending-requests/testing.php#sample [Laravel]
 :::
 
-`sent()` lists every request, `lastRequest()` gives the most recent and `sentCount()` counts them. A fake with nothing left to answer throws instead of making something up, so a call you did not expect fails the test.
+`sent()` lists every request, `lastRequest()` gives the most recent and `sentCount()` counts them. A fake with nothing left to answer throws instead of making something up, so a call you did not expect fails the test. [Testing](/testing) covers the fake in full.
 
 In Laravel, put the fake in the container in place of the `Client`, and every `Api` resolved afterwards sends to it. `Http::fake()` works too, as the [Transactions guide](/transactions#testing) shows.

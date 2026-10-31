@@ -2,7 +2,7 @@
 
 ## Introduction
 
-ING Pay can take a payment in four ways, and choosing one is the first real decision of an integration. They differ in who picks the payment method, where the payer pays, and how much of the checkout you build. They agree on the end: however a payment starts, ING Pay tells your server how it ended with a signed notification, and you fulfil the order from that.
+ING Pay can take a payment in four ways, and choosing one is the first real decision of an integration. They differ in who picks the payment method, where the payer pays, and how much of the checkout you build. They agree on the end: however a payment starts, ING Pay tells your server how it ended with a signed [notification](/notifications), and you fulfil the order from that.
 
 ## At a Glance
 
@@ -18,13 +18,13 @@ ING Pay can take a payment in four ways, and choosing one is the first real deci
 
 The paywall is ING Pay's own checkout page. You send the payer there with the amount, the order and where to come back to, and they choose a method and pay on that page. Nothing is sent from your server: the `Paywall` class builds a signed address, and the payer's browser does the rest.
 
-Choose the paywall when you want a working checkout with the least code, and are happy for the payer to leave your site to pay.
+Choose the paywall when you want a working checkout with the least code, and are happy for the payer to leave your site to pay. The [Paywall guide](/paywall) walks through it.
 
 ## Payment Link
 
 A payment link is a payment page that ING Pay hosts for you. You create it with an API call, and ING Pay answers with its address, which you send to the payer however you like: in an e-mail, an invoice, a chat. The payer opens it whenever they are ready, until it expires or you cancel it.
 
-Choose a payment link when the payer is not on your site at the moment you ask for the money, such as an order taken by phone or an invoice due in two weeks.
+Choose a payment link when the payer is not on your site at the moment you ask for the money, such as an order taken by phone or an invoice due in two weeks. The [Payment Links guide](/payment-links) walks through it.
 
 ## Transaction
 
@@ -36,7 +36,7 @@ Choose a transaction when the method picker is part of your own checkout. The [T
 
 The card widget is a card form that ING Pay's script draws on your own page, so the payer types their card details without leaving your site and without those details passing through your server. You sign its settings with `Paywall::fields()` and a `OneClickRequest`, and put them on the script tag. Besides a single payment, the widget can save the card for one-click or recurring payments later.
 
-Choose the widget when you take cards and want the payer to stay on your page.
+Choose the widget when you take cards and want the payer to stay on your page. [Card Widget & One-Click](/card-widget-and-one-click) walks through it.
 
 ## In Laravel
 
@@ -44,4 +44,4 @@ All four work the same way in Laravel. `Api` and `Paywall` are both bound in the
 
 ## Testing
 
-None of the four needs ING Pay to be tested. The paywall and the widget only build signed fields, which a test reads directly. The payment link and the transaction are API calls, which a test sends to a [fake client](/sending-requests#testing).
+None of the four needs ING Pay to be tested. The paywall and the widget only build signed fields, which a test reads directly. The payment link and the transaction are API calls, which a test sends to a [fake client](/testing).

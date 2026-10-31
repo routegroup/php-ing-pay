@@ -10,7 +10,7 @@ ING Pay gives you four values, and the package uses each for one job:
 
 - The **merchant ID** names your account. It is part of every API address.
 - The **service ID** names the shop, or service, a payment belongs to. It is filled into every request you send and every paywall form you build.
-- The **service key** signs the [paywall](/choosing-an-integration#paywall) form and checks the signature on every notification ING Pay sends you.
+- The **service key** signs the [paywall](/choosing-an-integration#paywall) form and checks the signature on every [notification](/notifications) ING Pay sends you.
 - The **API key** is the bearer token on every API call.
 
 Keep them out of your code and in your environment:
@@ -43,7 +43,7 @@ The environment is either `sandbox` or `production`. `sandbox` sends every call 
 
 Three more settings have defaults that suit most applications:
 
-- **Strict errors** (`strictErrors`, or `strict_errors` in Laravel) is on by default, and then every answer outside the 2xx range throws an `ApiErrorException`. Turned off, only a 422 or a 500 throws; any other refusal comes back as a response, whose `failed()` and `error()` you check yourself. [Sending Requests](/sending-requests#when-the-gateway-refuses) covers the exception.
+- **Strict errors** (`strictErrors`, or `strict_errors` in Laravel) is on by default, and then every answer outside the 2xx range throws an `ApiErrorException`. Turned off, only a 422 or a 500 throws; any other refusal comes back as a response, whose `failed()` and `error()` you check yourself. [Error Handling](/error-handling#reading-refusals-without-exceptions) shows both modes.
 - **Timeout** (`timeout`) is how long a call may take in total, 30 seconds by default.
 - **Connect timeout** (`connectTimeout`, or `connect_timeout` in Laravel) is how long opening the connection may take, 10 seconds by default.
 
